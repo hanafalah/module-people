@@ -1,8 +1,9 @@
 <?php
 
-namespace Zahzah\ModulePeople\Enums\People;
+namespace Hanafalah\ModulePeople\Enums\People;
 
-enum Sex: string{
-    case MALE     = '1'; 
-    case FEMALE   = '0'; 
+enum Sex: string
+{
+    case MALE     = '1';
+    case FEMALE   = '0';
 }

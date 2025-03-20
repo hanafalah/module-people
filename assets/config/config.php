@@ -1,11 +1,11 @@
-<?php 
+<?php
 
-use Zahzah\ModulePeople\{
+use Hanafalah\ModulePeople\{
     Models as ModulePeople,
     Contracts
 };
 
-return [    
+return [
     'contracts' => [
         'people' => Contracts\People::class,
         'tribe'  => Contracts\Tribe::class

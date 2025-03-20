@@ -1,8 +1,8 @@
 <?php
 
-namespace Zahzah\ModulePeople\Resources\People;
+namespace Hanafalah\ModulePeople\Resources\People;
 
-use Zahzah\LaravelSupport\Resources\ApiResource;
+use Hanafalah\LaravelSupport\Resources\ApiResource;
 
 class ViewPeople extends ApiResource
 {
@@ -16,7 +16,7 @@ class ViewPeople extends ApiResource
     {
         $arr = [
             'id'         => $this->id,
-            'name'       => (isset($this->first_name) ? '' : 'FNU ').$this->name,
+            'name'       => (isset($this->first_name) ? '' : 'FNU ') . $this->name,
             'first_name' => $this->first_name,
             'last_name'  => $this->last_name,
             "dob"        => $this->dob ?? null,
@@ -24,8 +24,8 @@ class ViewPeople extends ApiResource
             'phone_1'    => $this->phone_1,
             'phone_2'    => $this->phone_2,
             "sex"        => isset($this->sex) ? intval($this->sex) : null,
-            'card_identities' => $this->relationValidation('cardIdentities',function(){
-                return $this->cardIdentities->mapWithKeys(function($cardIdentity){
+            'card_identities' => $this->relationValidation('cardIdentities', function () {
+                return $this->cardIdentities->mapWithKeys(function ($cardIdentity) {
                     return [\strtoupper($cardIdentity->flag) => $cardIdentity->value];
                 });
             })
@@ -34,4 +34,3 @@ class ViewPeople extends ApiResource
         return $arr;
     }
 }
-

@@ -1,8 +1,8 @@
 {
-    "name": "zahzah/module-people",
+    "name": "hanafalah/module-people",
     "autoload": {
         "psr-4": {
-            "Zahzah\\ModulePeople\\": "src/"
+            "Hanafalah\\ModulePeople\\": "src/"
         }
     },
     "authors": [
@@ -12,15 +12,15 @@
         }
     ],
     "require": {
-        "zahzah/laravel-support": "1.x",
-        "zahzah/module-user": "1.x",
-        "zahzah/module-card-identity": "1.x",
-        "zahzah/module-regional": "1.x"
+        "hanafalah/laravel-support": "1.x",
+        "hanafalah/module-user": "1.x",
+        "hanafalah/module-card-identity": "1.x",
+        "hanafalah/module-regional": "1.x"
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Zahzah\\ModulePeople\\ModulePeopleServiceProvider"
+                "Hanafalah\\ModulePeople\\ModulePeopleServiceProvider"
             ]
         }
     },

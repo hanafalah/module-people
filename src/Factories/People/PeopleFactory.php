@@ -1,6 +1,6 @@
 <?php
 
-namespace Zahzah\ModulePeople\Factories\People;
+namespace Hanafalah\ModulePeople\Factories\People;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -41,12 +41,12 @@ class PeopleFactory extends Factory
     {
         $this->model = app(config('database.models.People'));
         $firstName = fake()->firstName();
-        $lastName  = fake()->lastName(); 
+        $lastName  = fake()->lastName();
         return [
             'uuid'              => Str::orderedUuid(),
             'first_name'        => $firstName,
             'last_name'         => $lastName,
-            'name'              => $firstName . ' ' . $lastName, 
+            'name'              => $firstName . ' ' . $lastName,
             'dob'               => fake()->date(),
             'pob'               => fake()->city()
         ];

@@ -1,18 +1,20 @@
 <?php
 
-namespace Zahzah\ModulePeople\Schemas;
+namespace Hanafalah\ModulePeople\Schemas;
 
-use Zahzah\LaravelSupport\Supports\PackageManagement;
-use Zahzah\ModulePeople\Contracts\Tribe as ContractsTribe;
+use Hanafalah\LaravelSupport\Supports\PackageManagement;
+use Hanafalah\ModulePeople\Contracts\Tribe as ContractsTribe;
 
-class Tribe extends PackageManagement implements ContractsTribe{
-    protected array $__guard   = ['id', 'parent_id', 'name']; 
+class Tribe extends PackageManagement implements ContractsTribe
+{
+    protected array $__guard   = ['id', 'parent_id', 'name'];
     protected array $__add     = [];
     protected string $__entity = 'Tribe';
 
-    public function booting(): self{
+    public function booting(): self
+    {
         static::$__class = $this;
-        static::$__model = $this->{$this->__entity."Model"}();
+        static::$__model = $this->{$this->__entity . "Model"}();
         return $this;
     }
 
@@ -25,7 +27,8 @@ class Tribe extends PackageManagement implements ContractsTribe{
      *
      * @return \Illuminate\Database\Eloquent\Model The API access model.
      */
-    public function addOrChange(? array $attributes=[]): self{    
+    public function addOrChange(?array $attributes = []): self
+    {
         $this->updateOrCreate($attributes);
         return $this;
     }

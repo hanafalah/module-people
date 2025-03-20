@@ -1,21 +1,29 @@
 <?php
 
-namespace Zahzah\ModulePeople;
+namespace Hanafalah\ModulePeople;
 
-use Zahzah\LaravelSupport\Supports\PackageManagement;
-use Zahzah\ModulePeople\Contracts\ModulePeople as ContractsModulePeople;
+use Hanafalah\LaravelSupport\Supports\PackageManagement;
+use Hanafalah\ModulePeople\Contracts\ModulePeople as ContractsModulePeople;
 
-class ModulePeople extends PackageManagement implements ContractsModulePeople{
-    public function booting(): self{
+class ModulePeople extends PackageManagement implements ContractsModulePeople
+{
+    public function booting(): self
+    {
         static::$__class = $this;
-        static::$__model = $this->{$this->__entity."Model"}();
+        static::$__model = $this->{$this->__entity . "Model"}();
         return $this;
-}
+    }
 
-protected array $__guard   = ['id','uuid']; 
+    protected array $__guard   = ['id', 'uuid'];
     protected array $__add     = [
-        'name','first_name','last_name','dob','pob','last_education',
-        'marga_id','citizenship_id'
+        'name',
+        'first_name',
+        'last_name',
+        'dob',
+        'pob',
+        'last_education',
+        'marga_id',
+        'citizenship_id'
     ];
 
     protected string $__entity = 'People';
@@ -29,8 +37,9 @@ protected array $__guard   = ['id','uuid'];
      *
      * @return \Illuminate\Database\Eloquent\Model The API access model.
      */
-    public function addOrChange(? array $attributes=[]): self{    
+    public function addOrChange(?array $attributes = []): self
+    {
         $this->updateOrCreate($attributes);
         return $this;
-    }   
+    }
 }

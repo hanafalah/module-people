@@ -1,10 +1,10 @@
 <?php
 
-namespace Zahzah\ModulePeople\Resources\People;
+namespace Hanafalah\ModulePeople\Resources\People;
 
-use Zahzah\ModulePatient\Resources\FamilyRelationship\ViewFamilyRelationship;
-use Zahzah\ModuleRegional\Resources\Address\ShowAddress;
-use Zahzah\LaravelSupport\Resources\Phone\ShowPhone;
+use Hanafalah\ModulePatient\Resources\FamilyRelationship\ViewFamilyRelationship;
+use Hanafalah\ModuleRegional\Resources\Address\ShowAddress;
+use Hanafalah\LaravelSupport\Resources\Phone\ShowPhone;
 
 class ShowPeople extends ViewPeople
 {
@@ -20,38 +20,37 @@ class ShowPeople extends ViewPeople
             'father_name'      => $this->father_name,
             'mother_name'      => $this->mother_name,
             'nationality'      => $this->nationality,
-            'country'          => $this->relationValidation('country', function() {
+            'country'          => $this->relationValidation('country', function () {
                 $country = $this->country;
                 return [
                     'id'   => $country->getKey(),
                     'name' => $country->name ?? null
                 ];
             }),
-            'tribe'            => $this->relationValidation('tribe',function(){
+            'tribe'            => $this->relationValidation('tribe', function () {
                 $tribe = $this->tribe;
                 return [
                     'id'   => $tribe->getKey(),
                     'name' => $tribe->name
                 ];
             }),
-            'family_relationship' => $this->relationValidation("familyRelationship",function(){
+            'family_relationship' => $this->relationValidation("familyRelationship", function () {
                 return $this->familyRelationShip->toShowApi();
             }),
-            'phones' => $this->relationValidation('hasPhones',function(){
-                return $this->hasPhones->transform(function($phone){
+            'phones' => $this->relationValidation('hasPhones', function () {
+                return $this->hasPhones->transform(function ($phone) {
                     return $phone->toShowApi();
                 });
             }),
-            'addresses' => $this->relationValidation('addresses',function(){
-                return (object) $this->addresses->mapWithKeys(function($address){
+            'addresses' => $this->relationValidation('addresses', function () {
+                return (object) $this->addresses->mapWithKeys(function ($address) {
                     return [\strtoupper($address->flag) => new ShowAddress($address)];
                 });
             })
         ];
 
-        $arr = array_merge(parent::toArray($request),$arr);
+        $arr = array_merge(parent::toArray($request), $arr);
 
         return $arr;
     }
 }
-

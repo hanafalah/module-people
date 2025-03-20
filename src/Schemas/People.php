@@ -1,20 +1,30 @@
 <?php
 
-namespace Zahzah\ModulePeople\Schemas;
+namespace Hanafalah\ModulePeople\Schemas;
 
-use Zahzah\LaravelSupport\Supports\PackageManagement;
-use Zahzah\ModulePeople\Contracts\People as ContractsPeople;
+use Hanafalah\LaravelSupport\Supports\PackageManagement;
+use Hanafalah\ModulePeople\Contracts\People as ContractsPeople;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Zahzah\ModuleRegional\Enums\Address\Flag;
-use Zahzah\ModulePeople\Enums\People\CardIdentity;
+use Hanafalah\ModuleRegional\Enums\Address\Flag;
+use Hanafalah\ModulePeople\Enums\People\CardIdentity;
 
-class People extends PackageManagement implements ContractsPeople{
+class People extends PackageManagement implements ContractsPeople
+{
     protected array $__guard   = ['id'];
     protected array $__add     = [
-        'name','first_name','last_name','pob','dob','sex',
-        'last_education','tribe_id','country_id','blood_type',
-        'father_name', 'mother_name'
+        'name',
+        'first_name',
+        'last_name',
+        'pob',
+        'dob',
+        'sex',
+        'last_education',
+        'tribe_id',
+        'country_id',
+        'blood_type',
+        'father_name',
+        'mother_name'
     ];
     protected string $__entity = 'People';
     public static $people_model;
@@ -22,53 +32,55 @@ class People extends PackageManagement implements ContractsPeople{
     protected array $__cache = [
         'index' => [
             'name'     => 'people',
-            'tags'     => ['people','people-index'],
+            'tags'     => ['people', 'people-index'],
             'forever'  => true
         ]
     ];
 
-    protected function showUsingRelation(){
-        return [
-
-        ];
+    protected function showUsingRelation()
+    {
+        return [];
     }
 
-    public function prepareShowPeople(? Model $model = null, ? array $attributes = null): Model{
+    public function prepareShowPeople(?Model $model = null, ?array $attributes = null): Model
+    {
         $attributes ??= request()->all();
 
         $model ??= $this->getPeople();
-        if (!isset($model)){
+        if (!isset($model)) {
             $id = $attributes['id'] ?? null;
-            if (!isset($id)) throw new \Exception('No id provided',422);
+            if (!isset($id)) throw new \Exception('No id provided', 422);
 
             $model = $this->people()->with($this->showUsingRelation())->find($id);
-        }else{
+        } else {
             $model->load($this->showUsingRelation());
         }
 
         return static::$people_model = $model;
     }
 
-    public function showPeople(? Model $model = null): array {
-        return $this->transforming($this->__resources['show'],function() use ($model){
+    public function showPeople(?Model $model = null): array
+    {
+        return $this->transforming($this->__resources['show'], function () use ($model) {
             return $this->prepareShowPeople($model);
         });
     }
 
-    public function prepareStorePeople(? array $attributes = null): Model{
+    public function prepareStorePeople(?array $attributes = null): Model
+    {
         $attributes ??= $this->getAttributes();
 
-        if (!isset($attributes['name']) && isset($attributes['last_name'])){
+        if (!isset($attributes['name']) && isset($attributes['last_name'])) {
             $attributes['name'] = trim(implode(' ', [$attributes['first_name'] ?? '', $attributes['last_name']]));
         }
         $sex = $attributes['sex'] ?? null;
-        if (isset($sex)){
+        if (isset($sex)) {
             $sex = \strval($sex);
         }
 
         $people = $this->people()->updateOrCreate([
             'id' => $attributes['id'] ?? null
-        ],[
+        ], [
             'name'        => $attributes['name'],
             'dob'         => $attributes['dob'] ?? null,
             'pob'         => $attributes['pob'] ?? null,
@@ -86,24 +98,36 @@ class People extends PackageManagement implements ContractsPeople{
         $people->save();
 
         $exceptions = [
-            'id','addresses','residence_address','phones',
-            'name','dob','pob','last_name','first_name','sex',
-            'father_name','mother_name','blood_type','tribe_id','country_id'
+            'id',
+            'addresses',
+            'residence_address',
+            'phones',
+            'name',
+            'dob',
+            'pob',
+            'last_name',
+            'first_name',
+            'sex',
+            'father_name',
+            'mother_name',
+            'blood_type',
+            'tribe_id',
+            'country_id'
         ];
-        foreach ($attributes as $key => $attribute){
-            if ($this->inArray($key,$exceptions)) continue;
+        foreach ($attributes as $key => $attribute) {
+            if ($this->inArray($key, $exceptions)) continue;
             $people->{$key} = $attribute ?? null;
         }
         $people->save();
-        if (isset($attributes['phones']) && count($attributes['phones']) > 0){
+        if (isset($attributes['phones']) && count($attributes['phones']) > 0) {
             $phones = $attributes['phones'];
             $people->setPhone($phones);
         }
 
         if (isset($attributes['addresses'])) {
             $addresses = $attributes['addresses'];
-            if (isset($addresses[Flag::ID_CARD->value]) && isset($addresses[Flag::ID_CARD->value]['name'])){
-                $ktpAddress           = $people->setAddress(Flag::ID_CARD->value,$addresses[Flag::ID_CARD->value] ?? []);
+            if (isset($addresses[Flag::ID_CARD->value]) && isset($addresses[Flag::ID_CARD->value]['name'])) {
+                $ktpAddress           = $people->setAddress(Flag::ID_CARD->value, $addresses[Flag::ID_CARD->value] ?? []);
                 $ktpAddress->rt       = $addresses['rt'] ?? null;
                 $ktpAddress->rw       = $addresses['rw'] ?? null;
                 $ktpAddress->zip_code = $addresses['zip_code'] ?? null;
@@ -112,7 +136,7 @@ class People extends PackageManagement implements ContractsPeople{
 
             $reqResidenceAddress = ($attributes['residence_same_ktp'] ?? null) ? $addresses[Flag::ID_CARD->value] : ($addresses[Flag::RESIDENCE->value] ?? null);
             if (isset($reqResidenceAddress) && isset($reqResidenceAddress['name'])) {
-                $residenceAddress           = $people->setAddress(Flag::RESIDENCE->value,$reqResidenceAddress ?? []);
+                $residenceAddress           = $people->setAddress(Flag::RESIDENCE->value, $reqResidenceAddress ?? []);
                 $residenceAddress->rt       = $reqResidenceAddress["rt"] ?? null;
                 $residenceAddress->rw       = $reqResidenceAddress["rw"] ?? null;
                 $residenceAddress->zip_code = $reqResidenceAddress["zip_code"] ?? null;
@@ -121,7 +145,7 @@ class People extends PackageManagement implements ContractsPeople{
         }
 
         // FAMILY RELATIONSHIP
-        if(isset($attributes['family_relationship'])){
+        if (isset($attributes['family_relationship'])) {
             $family = $attributes['family_relationship'];
             $people->familyRelationship()->updateOrCreate([
                 'people_id' => $people->getKey()
@@ -134,21 +158,23 @@ class People extends PackageManagement implements ContractsPeople{
 
         $people->save();
 
-        if (isset($attributes['nik']))      $people->setCardIdentity(CardIdentity::NIK,$attributes['nik'] ?? "");
-        if (isset($attributes['passport'])) $people->setCardIdentity(CardIdentity::PASSPORT,$attributes['passport'] ?? "");
+        if (isset($attributes['nik']))      $people->setCardIdentity(CardIdentity::NIK, $attributes['nik'] ?? "");
+        if (isset($attributes['passport'])) $people->setCardIdentity(CardIdentity::PASSPORT, $attributes['passport'] ?? "");
         $this->forgetTags('people');
 
         return static::$people_model = $people;
     }
 
-    public function storePeople(): array{
-        return $this->transaction(function(){
+    public function storePeople(): array
+    {
+        return $this->transaction(function () {
             return $this->showPeople($this->prepareStorePeople());
         });
     }
 
-    public function addOrChange(? array $attributes=[]): self{
-        if (!isset($attributes['name']) && isset($attributes['first_name'])){
+    public function addOrChange(?array $attributes = []): self
+    {
+        if (!isset($attributes['name']) && isset($attributes['first_name'])) {
             $attributes['name'] = implode(' ', [$attributes['first_name'], $attributes['last_name'] ?? '']);
         }
         $people = $this->updateOrCreate($attributes);
@@ -156,11 +182,13 @@ class People extends PackageManagement implements ContractsPeople{
         return $this;
     }
 
-    public function getPeople():? Model{
+    public function getPeople(): ?Model
+    {
         return static::$people_model;
     }
 
-    public function people(mixed $conditionals = []): Builder{
+    public function people(mixed $conditionals = []): Builder
+    {
         return $this->PeopleModel()->conditionals($conditionals);
     }
 }

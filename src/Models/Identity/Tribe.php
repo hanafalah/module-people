@@ -1,10 +1,11 @@
 <?php
 
-namespace Zahzah\ModulePeople\Models\Identity;
+namespace Hanafalah\ModulePeople\Models\Identity;
 
-use Zahzah\LaravelSupport\Models\BaseModel;
+use Hanafalah\LaravelSupport\Models\BaseModel;
 
-class Tribe extends BaseModel{
+class Tribe extends BaseModel
+{
     public $timestamps = false;
-    protected $fillable = ['id','parent_id','name'];
+    protected $fillable = ['id', 'parent_id', 'name'];
 }

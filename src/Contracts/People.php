@@ -1,12 +1,13 @@
 <?php
 
-namespace Zahzah\ModulePeople\Contracts;
+namespace Hanafalah\ModulePeople\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Zahzah\LaravelSupport\Contracts\DataManagement;
+use Hanafalah\LaravelSupport\Contracts\DataManagement;
 
-interface People extends DataManagement{
+interface People extends DataManagement
+{
     public function people(mixed $conditionals = []): Builder;
-    public function getPeople():? Model;
+    public function getPeople(): ?Model;
 }
