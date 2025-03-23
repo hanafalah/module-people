@@ -6,9 +6,16 @@ use Hanafalah\ModulePeople\{
 };
 
 return [
-    'contracts' => [
-        'people' => Contracts\People::class,
-        'tribe'  => Contracts\Tribe::class
+    'app' => [
+        'contracts' => [
+            //ADD YOUR CONTRACTS HERE
+            'people' => Contracts\People::class,
+            'tribe'  => Contracts\Tribe::class
+        ],
+    ],
+    'libs' => [
+        'model' => 'Models',
+        'contract' => 'Contracts'
     ],
     'database' => [
         'models' => [
