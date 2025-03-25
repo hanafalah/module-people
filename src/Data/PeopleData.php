@@ -7,7 +7,6 @@ use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
 use Hanafalah\ModulePeople\Enums\People\MaritalStatus;
 use Hanafalah\ModulePeople\Enums\People\Sex;
-    use Hanafalah\ModuleRegional\Data\AddressData;
 use Spatie\LaravelData\Attributes\{
     MapInputName, MapName,
     Validation\BeforeOrEqual,
