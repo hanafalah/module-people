@@ -11,21 +11,6 @@ use Hanafalah\ModulePeople\Enums\People\CardIdentity;
 
 class People extends PackageManagement implements ContractsPeople
 {
-    protected array $__guard   = ['id'];
-    protected array $__add     = [
-        'name',
-        'first_name',
-        'last_name',
-        'pob',
-        'dob',
-        'sex',
-        'last_education',
-        'tribe_id',
-        'country_id',
-        'blood_type',
-        'father_name',
-        'mother_name'
-    ];
     protected string $__entity = 'People';
     public static $people_model;
 
@@ -37,13 +22,15 @@ class People extends PackageManagement implements ContractsPeople
         ]
     ];
 
-    protected function showUsingRelation()
-    {
+    protected function viewUsingRelation(): array{
         return [];
     }
 
-    public function prepareShowPeople(?Model $model = null, ?array $attributes = null): Model
-    {
+    protected function showUsingRelation(): array{
+        return [];
+    }
+
+    public function prepareShowPeople(?Model $model = null, ?array $attributes = null): Model{
         $attributes ??= request()->all();
 
         $model ??= $this->getPeople();
@@ -55,19 +42,16 @@ class People extends PackageManagement implements ContractsPeople
         } else {
             $model->load($this->showUsingRelation());
         }
-
         return static::$people_model = $model;
     }
 
-    public function showPeople(?Model $model = null): array
-    {
-        return $this->transforming($this->__resources['show'], function () use ($model) {
+    public function showPeople(?Model $model = null): array{
+        return $this->showEntityResource(function() use ($model){
             return $this->prepareShowPeople($model);
         });
     }
 
-    public function prepareStorePeople(?array $attributes = null): Model
-    {
+    public function prepareStorePeople(PeopleData): Model{
         $attributes ??= $this->getAttributes();
 
         if (!isset($attributes['name']) && isset($attributes['last_name'])) {
@@ -88,7 +72,6 @@ class People extends PackageManagement implements ContractsPeople
             'first_name'  => $attributes['first_name'] ?? null,
             'sex'         => $sex,
             'blood_type'  => $attributes['blood_type'] ?? null,
-            'tribe_id'    => $attributes['tribe_id'] ?? null,
             'country_id'  => $attributes['country_id'] ?? null,
             'father_name' => $attributes['father_name'] ?? null,
             'mother_name' => $attributes['mother_name'] ?? null
@@ -111,7 +94,6 @@ class People extends PackageManagement implements ContractsPeople
             'father_name',
             'mother_name',
             'blood_type',
-            'tribe_id',
             'country_id'
         ];
         foreach ($attributes as $key => $attribute) {

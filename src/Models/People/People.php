@@ -23,7 +23,11 @@ class People extends BaseModel
     protected $primaryKey     = "id";
     protected $identity_flags = [];
     protected $list           = ['id', 'name', 'sex', 'dob', 'pob'];
-    protected $show           = ['last_education', 'father_name', 'mother_name', 'blood_type', 'tribe_id', 'first_name', 'last_name', 'country_id'];
+    protected $show           = [
+        'last_education', 'father_name', 'mother_name', 
+        'blood_type', 'first_name', 'last_name', 
+        'country_id', 'total_children', 'marital_status'
+    ];
 
     protected $prop_attributes = [];
 
@@ -32,40 +36,31 @@ class People extends BaseModel
         return \Hanafalah\ModulePeople\Factories\People\PeopleFactory::new();
     }
 
-    public function toViewApi()
-    {
-        return new ViewPeople($this);
+    public function getViewResource(){
+        return ViewPeople::class;
     }
 
-    public function toShowApi()
-    {
-        return new ShowPeople($this);
+    public function getShowResource(){
+        return ShowPeople::class;
     }
 
-    public function getBloodTypes(): array
-    {
+    public function getBloodTypes(): array{
         return array_column(BloodType::cases(), 'value');
     }
 
-    public function initializePeople()
-    {
+    public function initializePeople(){
         $this->identity_flags = Enums\People\CardIdentity::cases();
     }
 
-    public function tribe()
-    {
-        return $this->belongsToModel('Tribe');
-    }
-    public function country()
-    {
+    public function country(){
         return $this->belongsToModel('Country');
     }
-    public function addresses()
-    {
+
+    public function addresses(){
         return $this->morphManyModel('Address', 'model');
     }
-    public function familyRelationship()
-    {
+
+    public function familyRelationship(){
         return $this->hasOneModel('FamilyRelationship');
     }
 }

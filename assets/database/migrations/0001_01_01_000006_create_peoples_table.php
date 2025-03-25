@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
+use Hanafalah\ModulePeople\Enums\People\MaritalStatus;
+use Hanafalah\ModulePeople\Enums\People\Sex;
 use Hanafalah\ModulePeople\Models\Identity\Tribe;
 use Hanafalah\ModulePeople\Models\People\{
     People
@@ -31,24 +33,21 @@ return new class extends Migration
         $table_name = $this->__table->getTable();
         if (!$this->isTableExists()) {
             Schema::create($table_name, function (Blueprint $table) {
-                $tribe   = app(config('database.models.Tribe', Tribe::class));
                 $country = app(config('database.models.Country', Country::class));
 
                 $table->ulid('id')->primary();
                 $table->string('name', 100)->nullable(false);
                 $table->string('first_name', 50)->nullable();
                 $table->string('last_name', 50)->nullable();
-                $table->enum('sex', ['1', '0'])->nullable(false);
-                $table->string('mother_name', 50)->nullable();
-                $table->string('father_name', 50)->nullable();
                 $table->date('dob')->nullable();
                 $table->string('pob', 150)->nullable();
-                $table->string('last_education', 150)->nullable();
+                $table->enum('sex', Sex::cases())->nullable(false);
+                $table->enum('marital_status', MaritalStatus::cases())->nullable();
                 $table->enum('blood_type', array_column(BloodType::cases(), 'value'))->nullable();
-
-                $table->foreignIdFor($tribe::class)->nullable()
-                    ->index()->constrained()->cascadeOnUpdate()
-                    ->nullOnDelete();
+                $table->string('mother_name', 50)->nullable();
+                $table->string('father_name', 50)->nullable();
+                $table->string('last_education', 150)->nullable();
+                $table->unsignedTinyInteger('total_children')->nullable();
 
                 $table->foreignIdFor($country::class)->nullable()
                     ->index()->constrained()->cascadeOnUpdate()
