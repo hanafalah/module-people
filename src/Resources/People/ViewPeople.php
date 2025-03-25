@@ -3,6 +3,7 @@
 namespace Hanafalah\ModulePeople\Resources\People;
 
 use Hanafalah\LaravelSupport\Resources\ApiResource;
+use Illuminate\Support\Str;
 
 class ViewPeople extends ApiResource
 {
@@ -15,18 +16,16 @@ class ViewPeople extends ApiResource
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
-            'id'         => $this->id,
-            'name'       => (isset($this->first_name) ? '' : 'FNU ') . $this->name,
-            'first_name' => $this->first_name,
-            'last_name'  => $this->last_name,
-            "dob"        => $this->dob ?? null,
-            "pob"        => $this->pob ?? null,
-            'phone_1'    => $this->phone_1,
-            'phone_2'    => $this->phone_2,
-            "sex"        => isset($this->sex) ? intval($this->sex) : null,
-            'card_identities' => $this->relationValidation('cardIdentities', function () {
+            'id'            => $this->id,
+            'name'          => (isset($this->first_name) ? '' : 'FNU ') . $this->name,
+            'first_name'    => $this->first_name,
+            'last_name'     => $this->last_name,
+            "dob"           => $this->dob ?? null,
+            "pob"           => $this->pob ?? null,
+            "sex"           => isset($this->sex) ? intval($this->sex) : null,
+            'card_identity' => $this->relationValidation('cardIdentities', function () {
                 return $this->cardIdentities->mapWithKeys(function ($cardIdentity) {
-                    return [\strtoupper($cardIdentity->flag) => $cardIdentity->value];
+                    return [Str::lower($cardIdentity->flag) => $cardIdentity->value];
                 });
             })
         ];

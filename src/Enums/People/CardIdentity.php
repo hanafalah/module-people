@@ -9,4 +9,5 @@ enum CardIdentity: string
     case PASSPORT = 'PASSPORT';
     case VISA     = 'VISA';
     case KK       = 'KK';
+    case NPWP     = 'NPWP';
 }

@@ -7,7 +7,7 @@ use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
 use Hanafalah\ModulePeople\Enums\People\MaritalStatus;
 use Hanafalah\ModulePeople\Enums\People\Sex;
-use Hanafalah\ModuleRegional\Data\AddressData;
+    use Hanafalah\ModuleRegional\Data\AddressData;
 use Spatie\LaravelData\Attributes\{
     MapInputName, MapName,
     Validation\BeforeOrEqual,
@@ -82,12 +82,24 @@ class PeopleData extends Data{
         #[MapName('country_id')]
         public mixed $country_id = null,
 
-        #[MapInputName('ktp_address')]
-        #[MapName('ktp_address')]
-        public ?AddressData $ktp_address = null,
+        #[MapInputName('address')]
+        #[MapName('address')]
+        public ?PeopleAddressData $address = null,
 
-        #[MapInputName('residence_address')]
-        #[MapName('residence_address')]
-        public ?AddressData $residence_address = null,
+        #[MapInputName('card_identity')]
+        #[MapName('card_identity')]
+        public ?CardIdentityData $card_identity = null,
+
+        #[MapInputName('family_relationship')]
+        #[MapName('family_relationship')]
+        public ?FamilyRelationshipData $family_relationship = null,
+
+        #[MapInputName('phones')]
+        #[MapName('phones')]
+        public ?array $phones = [],
+
+        #[MapInputName('props')]
+        #[MapName('props')]
+        public ?array $props = []
     ){}
 }

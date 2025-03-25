@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModuleRegional\Enums\Address\Flag;
 use Hanafalah\ModulePeople\Enums\People\CardIdentity;
+use Hanafalah\ModuleRegional\Data\AddressData;
+use Hanafalah\ModuleWorkspace\Data\CardIdentityData;
+use Hanafalah\ModuleWorkspace\Data\PeopleData;
+use Illuminate\Support\Str;
 
 class People extends PackageManagement implements ContractsPeople
 {
@@ -51,104 +55,95 @@ class People extends PackageManagement implements ContractsPeople
         });
     }
 
-    public function prepareStorePeople(PeopleData): Model{
-        $attributes ??= $this->getAttributes();
+    public function prepareStorePeople(PeopleData $people_dto): Model{
 
-        if (!isset($attributes['name']) && isset($attributes['last_name'])) {
-            $attributes['name'] = trim(implode(' ', [$attributes['first_name'] ?? '', $attributes['last_name']]));
-        }
-        $sex = $attributes['sex'] ?? null;
-        if (isset($sex)) {
-            $sex = \strval($sex);
+        if (!isset($people_dto->name) && isset($people_dto->last_name)) {
+            $people_dto->name = trim(implode(' ', [$people_dto->first_name ?? '', $people_dto->last_name]));
         }
 
         $people = $this->people()->updateOrCreate([
             'id' => $attributes['id'] ?? null
         ], [
-            'name'        => $attributes['name'],
-            'dob'         => $attributes['dob'] ?? null,
-            'pob'         => $attributes['pob'] ?? null,
-            'last_name'   => $attributes['last_name'],
-            'first_name'  => $attributes['first_name'] ?? null,
-            'sex'         => $sex,
-            'blood_type'  => $attributes['blood_type'] ?? null,
-            'country_id'  => $attributes['country_id'] ?? null,
-            'father_name' => $attributes['father_name'] ?? null,
-            'mother_name' => $attributes['mother_name'] ?? null
+            'name'            => $people_dto->name,
+            'dob'             => $people_dto->dob,
+            'pob'             => $people_dto->pob,
+            'last_name'       => $people_dto->last_name,
+            'first_name'      => $people_dto->first_name,
+            'sex'             => $people_dto->sex,
+            'blood_type'      => $people_dto->blood_type,
+            'country_id'      => $people_dto->country_id,
+            'father_name'     => $people_dto->father_name,
+            'mother_name'     => $people_dto->mother_name,
+            'last_education'  => $people_dto->last_education, 
+            'total_children'  => $people_dto->last_education, 
+            'marital_status'  => $people_dto->marital_status
         ]);
 
         $people->nationality = $attributes['nationality'] ?? request()->nationality ?? 1;
+        foreach ($people_dto->props as $key => $prop) $people->{$key} = $prop;
+        
         $people->save();
-
-        $exceptions = [
-            'id',
-            'addresses',
-            'residence_address',
-            'phones',
-            'name',
-            'dob',
-            'pob',
-            'last_name',
-            'first_name',
-            'sex',
-            'father_name',
-            'mother_name',
-            'blood_type',
-            'country_id'
-        ];
-        foreach ($attributes as $key => $attribute) {
-            if ($this->inArray($key, $exceptions)) continue;
-            $people->{$key} = $attribute ?? null;
-        }
-        $people->save();
-        if (isset($attributes['phones']) && count($attributes['phones']) > 0) {
-            $phones = $attributes['phones'];
+        if (isset($people_dto->phones) && count($people_dto->phones) > 0) {
+            $phones = $people_dto->phones;
             $people->setPhone($phones);
         }
 
-        if (isset($attributes['addresses'])) {
-            $addresses = $attributes['addresses'];
-            if (isset($addresses[Flag::ID_CARD->value]) && isset($addresses[Flag::ID_CARD->value]['name'])) {
-                $ktpAddress           = $people->setAddress(Flag::ID_CARD->value, $addresses[Flag::ID_CARD->value] ?? []);
-                $ktpAddress->rt       = $addresses['rt'] ?? null;
-                $ktpAddress->rw       = $addresses['rw'] ?? null;
-                $ktpAddress->zip_code = $addresses['zip_code'] ?? null;
-                $ktpAddress->save();
+        if (isset($people_dto->address)){
+            $address = $people_dto->address;
+            if (isset($address->ktp)) {
+                $address->ktp = $this->requestDTO(AddressData::class,$address->ktp->toArray());
+                $people->setAddress(Flag::KTP->value, $address->ktp->toArray());
             }
-
-            $reqResidenceAddress = ($attributes['residence_same_ktp'] ?? null) ? $addresses[Flag::ID_CARD->value] : ($addresses[Flag::RESIDENCE->value] ?? null);
-            if (isset($reqResidenceAddress) && isset($reqResidenceAddress['name'])) {
-                $residenceAddress           = $people->setAddress(Flag::RESIDENCE->value, $reqResidenceAddress ?? []);
-                $residenceAddress->rt       = $reqResidenceAddress["rt"] ?? null;
-                $residenceAddress->rw       = $reqResidenceAddress["rw"] ?? null;
-                $residenceAddress->zip_code = $reqResidenceAddress["zip_code"] ?? null;
-                $residenceAddress->save();
+    
+            $same_as_ktp = isset($address->residence_same_as_ktp) && $address->residence_same_as_ktp;
+            if ($same_as_ktp) $address->residence = $address->ktp;            
+    
+            if (isset($address->residence)) {            
+                if (!$same_as_ktp) $address->residence = $this->requestDTO(AddressData::class,$address->residence->toArray());
+                $people->setAddress(Flag::RESIDENCE->value, $address->residence->toArray());
             }
         }
 
         // FAMILY RELATIONSHIP
-        if (isset($attributes['family_relationship'])) {
-            $family = $attributes['family_relationship'];
+        if (isset($people_dto->family_relationship)) {
+            $family = $people_dto->family_relationship;
             $people->familyRelationship()->updateOrCreate([
                 'people_id' => $people->getKey()
             ], [
-                'role'      => $family['role'] ?? null,
-                'name'      => $family['name'] ?? null,
-                'phone'     => $family['phone'] ?? null,
+                'role'      => $family->role,
+                'name'      => $family->name,
+                'phone'     => $family->phone
             ]);
         }
 
+        if (isset($people_dto->card_identity)){
+            $card_identity = $people_dto->card_identity;
+            $this->peopleIdentity($people, $card_identity,[
+                CardIdentity::NIK->value,
+                CardIdentity::KK->value,
+                CardIdentity::PASSPORT->value,
+                CardIdentity::NPWP->value,
+                CardIdentity::VISA->value,
+                CardIdentity::SIM->value
+            ]);
+        }
         $people->save();
 
-        if (isset($attributes['nik']))      $people->setCardIdentity(CardIdentity::NIK, $attributes['nik'] ?? "");
-        if (isset($attributes['passport'])) $people->setCardIdentity(CardIdentity::PASSPORT, $attributes['passport'] ?? "");
         $this->forgetTags('people');
 
         return static::$people_model = $people;
     }
 
-    public function storePeople(): array
-    {
+    protected function peopleIdentity(Model &$people, CardIdentityData $card_identity_dto, array $types){
+        foreach ($types as $type) {
+            $lower_type = Str::lower($type);
+            $value = $card_identity_dto->{$lower_type} ?? null;
+            if (isset($value)) $people->setCardIdentity($type, $card_identity_dto->{$lower_type});
+            $people->{$lower_type} = $value;
+        }
+    }
+
+    public function storePeople(): array{
         return $this->transaction(function () {
             return $this->showPeople($this->prepareStorePeople());
         });

@@ -2,9 +2,8 @@
 
 namespace Hanafalah\ModulePeople\Resources\People;
 
-use Hanafalah\ModulePatient\Resources\FamilyRelationship\ViewFamilyRelationship;
 use Hanafalah\ModuleRegional\Resources\Address\ShowAddress;
-use Hanafalah\LaravelSupport\Resources\Phone\ShowPhone;
+use Illuminate\Support\Str;
 
 class ShowPeople extends ViewPeople
 {
@@ -14,9 +13,9 @@ class ShowPeople extends ViewPeople
             'profile'          => $this->profile,
             'blood_type'       => $this->blood_type,
             'last_education'   => $this->last_education,
+            'marital_status'   => $this->marital_status,
+            'total_children'   => $this->total_children,
             'email'            => $this->email,
-            'phone_1'          => $this->phone_1,
-            'phone_2'          => $this->phone_2,
             'father_name'      => $this->father_name,
             'mother_name'      => $this->mother_name,
             'nationality'      => $this->nationality,
@@ -27,13 +26,6 @@ class ShowPeople extends ViewPeople
                     'name' => $country->name ?? null
                 ];
             }),
-            'tribe'            => $this->relationValidation('tribe', function () {
-                $tribe = $this->tribe;
-                return [
-                    'id'   => $tribe->getKey(),
-                    'name' => $tribe->name
-                ];
-            }),
             'family_relationship' => $this->relationValidation("familyRelationship", function () {
                 return $this->familyRelationShip->toShowApi();
             }),
@@ -42,9 +34,9 @@ class ShowPeople extends ViewPeople
                     return $phone->toShowApi();
                 });
             }),
-            'addresses' => $this->relationValidation('addresses', function () {
+            'address' => $this->relationValidation('addresses', function () {
                 return (object) $this->addresses->mapWithKeys(function ($address) {
-                    return [\strtoupper($address->flag) => new ShowAddress($address)];
+                    return [Str::lower($address->flag) => new ShowAddress($address)];
                 });
             })
         ];
