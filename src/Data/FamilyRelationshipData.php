@@ -1,10 +1,12 @@
 <?php
 
-namespace Hanafalah\ModuleWorkspace\Data;
+namespace Hanafalah\ModulePeople\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
+use Hanafalah\ModulePeople\Enums\FamilyRelationship\Flag;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapName;
+use Spatie\LaravelData\Attributes\Validation\Enum;
 
 class FamilyRelationshipData extends Data{
     public function __construct(
@@ -14,6 +16,7 @@ class FamilyRelationshipData extends Data{
 
         #[MapInputName('role')]
         #[MapName('role')]
+        #[Enum(Flag::class)]
         public ?string $role = null,
 
         #[MapInputName('name')]

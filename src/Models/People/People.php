@@ -12,11 +12,12 @@ use Hanafalah\ModulePeople\Enums;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
 use Hanafalah\ModulePeople\Resources\People\ShowPeople;
 use Hanafalah\ModulePeople\Resources\People\ViewPeople;
+use Hanafalah\ModuleRegional\Concerns\HasAddress;
 use Hanafalah\ModuleRegional\Concerns\HasLocation;
 
 class People extends BaseModel
 {
-    use HasUlids, HasCardIdentity, HasUserReference, HasProps, HasLocation, HasPhone;
+    use HasUlids, HasCardIdentity, HasAddress, HasUserReference, HasProps, HasLocation, HasPhone;
 
     protected $table          = "peoples";
     protected $keyType        = "string";

@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModuleRegional\Enums\Address\Flag;
 use Hanafalah\ModulePeople\Enums\People\CardIdentity;
 use Hanafalah\ModuleRegional\Data\AddressData;
-use Hanafalah\ModuleWorkspace\Data\CardIdentityData;
-use Hanafalah\ModuleWorkspace\Data\PeopleData;
+use Hanafalah\ModulePeople\Data\CardIdentityData;
+use Hanafalah\ModulePeople\Data\PeopleData;
 use Illuminate\Support\Str;
 
 class People extends PackageManagement implements ContractsPeople
@@ -114,58 +114,40 @@ class People extends PackageManagement implements ContractsPeople
                 'name'      => $family->name,
                 'phone'     => $family->phone
             ]);
-        }
-
+        } 
         if (isset($people_dto->card_identity)){
             $card_identity = $people_dto->card_identity;
-            $this->peopleIdentity($people, $card_identity,[
-                CardIdentity::NIK->value,
-                CardIdentity::KK->value,
-                CardIdentity::PASSPORT->value,
-                CardIdentity::NPWP->value,
-                CardIdentity::VISA->value,
-                CardIdentity::SIM->value
-            ]);
+            $this->peopleIdentity($people, $card_identity,array_column(CardIdentity::cases(),'value'));
         }
         $people->save();
 
-        $this->forgetTags('people');
+        // $this->forgetTags('people');
 
         return static::$people_model = $people;
     }
 
     protected function peopleIdentity(Model &$people, CardIdentityData $card_identity_dto, array $types){
+        $card_identity = [];
         foreach ($types as $type) {
             $lower_type = Str::lower($type);
             $value = $card_identity_dto->{$lower_type} ?? null;
             if (isset($value)) $people->setCardIdentity($type, $card_identity_dto->{$lower_type});
-            $people->{$lower_type} = $value;
+            $card_identity[$lower_type] = $value;
         }
+        $people->setAttribute('card_identity',$card_identity);
     }
 
-    public function storePeople(): array{
-        return $this->transaction(function () {
-            return $this->showPeople($this->prepareStorePeople());
+    public function storePeople(?PeopleData $people_dto = null): array{
+        return $this->transaction(function () use ($people_dto){
+            return $this->showPeople($this->prepareStorePeople($people_dto ?? $this->requestDTO(PeopleData::class)));
         });
     }
 
-    public function addOrChange(?array $attributes = []): self
-    {
-        if (!isset($attributes['name']) && isset($attributes['first_name'])) {
-            $attributes['name'] = implode(' ', [$attributes['first_name'], $attributes['last_name'] ?? '']);
-        }
-        $people = $this->updateOrCreate($attributes);
-        static::$people_model = $people;
-        return $this;
-    }
-
-    public function getPeople(): ?Model
-    {
+    public function getPeople(): mixed{
         return static::$people_model;
     }
 
-    public function people(mixed $conditionals = []): Builder
-    {
-        return $this->PeopleModel()->conditionals($conditionals);
+    public function people(mixed $conditionals = []): Builder{
+        return $this->PeopleModel()->withParameters()->conditionals($this->mergeCondition($conditionals));
     }
 }

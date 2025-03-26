@@ -1,6 +1,6 @@
 <?php
 
-namespace Hanafalah\ModuleWorkspace\Data;
+namespace Hanafalah\ModulePeople\Data;
 
 use Carbon\Carbon;
 use Hanafalah\LaravelSupport\Supports\Data;

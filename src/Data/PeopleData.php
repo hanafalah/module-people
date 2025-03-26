@@ -1,8 +1,7 @@
 <?php
 
-namespace Hanafalah\ModuleWorkspace\Data;
+namespace Hanafalah\ModulePeople\Data;
 
-use Carbon\Carbon;
 use Hanafalah\LaravelSupport\Supports\Data;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
 use Hanafalah\ModulePeople\Enums\People\MaritalStatus;
@@ -25,16 +24,16 @@ class PeopleData extends Data{
         #[MapInputName('name')]
         #[MapName('name')]
         #[RequiredWithoutAll('first_name','last_name')]
-        public string $name,
+        public ?string $name = null,
 
         #[MapInputName('first_name')]
         #[MapName('first_name')]
-        public string $first_name,
+        public ?string $first_name = null,
         
         #[MapInputName('last_name')]
         #[MapName('last_name')]
         #[RequiredWithout('name')]
-        public string $last_name,
+        public ?string $last_name = null,
 
         #[MapInputName('sex')]
         #[MapName('sex')]
@@ -43,9 +42,8 @@ class PeopleData extends Data{
 
         #[MapInputName('dob')]
         #[MapName('dob')]
-        #[BeforeOrEqual(Carbon::today())]
         #[DateFormat(['Y-m-d', 'd-m-Y'])]
-        public ?Carbon $dob = null,
+        public ?string $dob = null,
 
         #[MapInputName('pob')]
         #[MapName('pob')]

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hanafalah\ModuleWorkspace\Data;
+namespace Hanafalah\ModulePeople\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
 use Spatie\LaravelData\Attributes\{
