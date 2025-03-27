@@ -134,7 +134,7 @@ class People extends PackageManagement implements ContractsPeople
             if (isset($value)) $people->setCardIdentity($type, $card_identity_dto->{$lower_type});
             $card_identity[$lower_type] = $value;
         }
-        $people->setAttribute('card_identity',$card_identity);
+        $people->setAttribute('prop_card_identity',$card_identity);
     }
 
     public function storePeople(?PeopleData $people_dto = null): array{
