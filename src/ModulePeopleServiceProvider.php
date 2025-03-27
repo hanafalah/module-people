@@ -17,16 +17,14 @@ class ModulePeopleServiceProvider extends BaseServiceProvider
             ->registerCommandService(Providers\CommandServiceProvider::class)
             ->registers([
                 '*',
-                'Namespace' => function () {
-                    $this->publishes([
-                        $this->getAssetPath('/database/migrations/data/tribes.php') => database_path('data/tribes.php'),
-                    ], 'data');
-                },
+                // 'Namespace' => function () {
+                //     $this->publishes([
+                //         $this->getAssetPath('/database/migrations/data/tribes.php') => database_path('data/tribes.php'),
+                //     ], 'data');
+                // },
                 'Services'  => function () {
                     $this->binds([
-                        Contracts\ModulePeople::class => new ModulePeople,
-                        Contracts\People::class => new Schemas\People,
-                        Contracts\Tribe::class => new Schemas\Tribe
+                        Contracts\ModulePeople::class => new ModulePeople
                     ]);
                 }
             ]);
