@@ -23,11 +23,7 @@ class ViewPeople extends ApiResource
             "dob"           => $this->dob ?? null,
             "pob"           => $this->pob ?? null,
             "sex"           => isset($this->sex) ? intval($this->sex) : null,
-            'card_identity' => $this->relationValidation('cardIdentities', function () {
-                return $this->cardIdentities->mapWithKeys(function ($cardIdentity) {
-                    return [Str::lower($cardIdentity->flag) => $cardIdentity->value];
-                });
-            })
+            'card_identity' => $this->prop_card_identity
         ];
 
         return $arr;
