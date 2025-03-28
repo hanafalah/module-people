@@ -3,7 +3,7 @@
 namespace Hanafalah\ModulePeople\Schemas;
 
 use Hanafalah\LaravelSupport\Supports\PackageManagement;
-use Hanafalah\ModulePeople\Contracts\People as ContractsPeople;
+use Hanafalah\ModulePeople\Contracts\Schemas\People as ContractsPeople;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModuleRegional\Enums\Address\Flag;

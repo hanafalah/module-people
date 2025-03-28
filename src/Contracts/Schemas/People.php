@@ -1,6 +1,6 @@
 <?php
 
-namespace Hanafalah\ModulePeople\Contracts;
+namespace Hanafalah\ModulePeople\Contracts\Schemas;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
