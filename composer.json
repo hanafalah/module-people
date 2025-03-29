@@ -12,10 +12,10 @@
         }
     ],
     "require": {
-        "hanafalah/laravel-support": "dev-main",
-        "hanafalah/module-user": "dev-main",
-        "hanafalah/module-card-identity": "dev-main",
-        "hanafalah/module-regional": "dev-main"
+        "hanafalah/laravel-support": "@dev",
+        "hanafalah/module-user": "@dev",
+        "hanafalah/module-card-identity": "@dev",
+        "hanafalah/module-regional": "@dev"
     },
     "extra": {
         "laravel": {
