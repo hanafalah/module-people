@@ -2,17 +2,14 @@
 
 namespace Hanafalah\ModulePeople\Data;
 
-use Carbon\Carbon;
 use Hanafalah\LaravelSupport\Supports\Data;
-use Hanafalah\ModulePeople\Enums\People\BloodType;
-use Hanafalah\ModulePeople\Enums\People\MaritalStatus;
-use Hanafalah\ModulePeople\Enums\People\Sex;
-    use Hanafalah\ModuleRegional\Data\AddressData;
+use Hanafalah\ModulePeople\Contracts\Data\PeopleAddressData as DataPeopleAddressData;
+use Hanafalah\ModuleRegional\Data\AddressData;
 use Spatie\LaravelData\Attributes\{
     MapInputName, MapName
 };
 
-class PeopleAddressData extends Data{
+class PeopleAddressData extends Data implements DataPeopleAddressData{
     public function __construct(
         #[MapInputName('ktp')]
         #[MapName('ktp')]

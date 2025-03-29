@@ -18,7 +18,7 @@ class ShowPeople extends ViewPeople
             'email'            => $this->email,
             'father_name'      => $this->father_name,
             'mother_name'      => $this->mother_name,
-            'nationality'      => $this->nationality,
+            'is_nationality'   => $this->boolValidate('is_nationality'),
             'country'          => $this->relationValidation('country', function () {
                 $country = $this->country;
                 return [
