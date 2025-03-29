@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModuleRegional\Enums\Address\Flag;
 use Hanafalah\ModulePeople\Enums\People\CardIdentity;
-use Hanafalah\ModuleRegional\Data\AddressData;
-use Hanafalah\ModulePeople\Data\CardIdentityData;
-use Hanafalah\ModulePeople\Data\PeopleData;
+use Hanafalah\ModuleRegional\Contracts\Data\AddressData;
+use Hanafalah\ModulePeople\Contracts\Data\CardIdentityData;
+use Hanafalah\ModulePeople\Contracts\Data\PeopleData;
 use Illuminate\Support\Str;
 
 class People extends PackageManagement implements ContractsPeople
@@ -56,13 +56,12 @@ class People extends PackageManagement implements ContractsPeople
     }
 
     public function prepareStorePeople(PeopleData $people_dto): Model{
-
         if (!isset($people_dto->name) && isset($people_dto->last_name)) {
             $people_dto->name = trim(implode(' ', [$people_dto->first_name ?? '', $people_dto->last_name]));
         }
 
         $people = $this->people()->updateOrCreate([
-            'id' => $attributes['id'] ?? null
+            'id' => $people_dto->id ?? null
         ], [
             'name'            => $people_dto->name,
             'dob'             => $people_dto->dob,
@@ -79,7 +78,7 @@ class People extends PackageManagement implements ContractsPeople
             'marital_status'  => $people_dto->marital_status
         ]);
 
-        $people->nationality = $attributes['nationality'] ?? request()->nationality ?? 1;
+        $people->nationality = $people_dto->is_nationality ?? request()->nationality ?? true;
         foreach ($people_dto->props as $key => $prop) $people->{$key} = $prop;
         
         $people->save();
@@ -120,7 +119,7 @@ class People extends PackageManagement implements ContractsPeople
             $this->peopleIdentity($people, $card_identity,array_column(CardIdentity::cases(),'value'));
         }
         $people->save();
-
+        $people->refresh();
         // $this->forgetTags('people');
 
         return static::$people_model = $people;

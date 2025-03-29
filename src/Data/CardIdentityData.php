@@ -3,11 +3,12 @@
 namespace Hanafalah\ModulePeople\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
+use Hanafalah\ModulePeople\Contracts\Data\CardIdentityData as DataCardIdentityData;
 use Spatie\LaravelData\Attributes\{
     MapInputName, MapName
 };
 
-class CardIdentityData extends Data{
+class CardIdentityData extends Data implements DataCardIdentityData{
     public function __construct(
         #[MapInputName('nik')]
         #[MapName('nik')]

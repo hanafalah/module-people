@@ -5,7 +5,7 @@ namespace Hanafalah\ModulePeople\Contracts\Schemas;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
-use Hanafalah\ModulePeople\Data\PeopleData;
+use Hanafalah\ModulePeople\Contracts\Data\PeopleData;
 
 interface People extends DataManagement
 {
