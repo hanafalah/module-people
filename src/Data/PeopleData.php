@@ -3,19 +3,19 @@
 namespace Hanafalah\ModulePeople\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
+use Hanafalah\ModulePeople\Contracts\Data\PeopleData as DataPeopleData;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
 use Hanafalah\ModulePeople\Enums\People\MaritalStatus;
 use Hanafalah\ModulePeople\Enums\People\Sex;
 use Spatie\LaravelData\Attributes\{
     MapInputName, MapName,
-    Validation\BeforeOrEqual,
     Validation\DateFormat,
     Validation\Enum,
     Validation\RequiredWithout,
     Validation\RequiredWithoutAll
 };
 
-class PeopleData extends Data{
+class PeopleData extends Data implements DataPeopleData{
     public function __construct(
         #[MapInputName('id')]
         #[MapName('id')]
@@ -74,6 +74,10 @@ class PeopleData extends Data{
         #[MapInputName('total_children')]
         #[MapName('total_children')]
         public ?int $total_children = null,
+
+        #[MapInputName('is_nationality')]
+        #[MapName('is_nationality')]
+        public mixed $is_nationality = null,
 
         #[MapInputName('country_id')]
         #[MapName('country_id')]
