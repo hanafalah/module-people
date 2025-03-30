@@ -23,7 +23,7 @@ class People extends BaseModel
     protected $keyType        = "string";
     protected $primaryKey     = "id";
     protected $identity_flags = [];
-    protected $list           = ['id', 'name', 'sex', 'dob', 'pob'];
+    protected $list           = ['id', 'uuid', 'name', 'sex', 'dob', 'pob'];
     protected $show           = [
         'last_education', 'father_name', 'mother_name', 
         'blood_type', 'first_name', 'last_name', 
