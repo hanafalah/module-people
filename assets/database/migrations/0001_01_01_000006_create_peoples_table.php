@@ -36,6 +36,7 @@ return new class extends Migration
                 $country = app(config('database.models.Country', Country::class));
 
                 $table->ulid('id')->primary();
+                $table->string('uuid', 36)->nullable();
                 $table->string('name', 100)->nullable(false);
                 $table->string('first_name', 50)->nullable();
                 $table->string('last_name', 50)->nullable();
