@@ -18,7 +18,7 @@ class ViewPeople extends ApiResource
         $arr = [
             'id'            => $this->id,
             'uuid'          => $this->uuid,
-            'name'          => (isset($this->first_name) ? '' : 'FNU ') . $this->name,
+            'name'          => (!isset($this->first_name) && isset($this->last_name) ? 'FNU ' : '') . $this->name,
             'first_name'    => $this->first_name,
             'last_name'     => $this->last_name,
             "dob"           => $this->dob ?? null,
