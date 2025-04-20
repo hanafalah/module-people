@@ -6,6 +6,10 @@ use Hanafalah\ModulePeople\{
 };
 
 return [
+    "namespace"     => "Hanafalah\ModulePeople",
+    "paths"         => [
+        "base_path"    => __DIR__.'\\..\\'
+    ],
     'app' => [
         'contracts' => [
             //ADD YOUR CONTRACTS HERE
