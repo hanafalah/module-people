@@ -79,7 +79,7 @@ class People extends PackageManagement implements ContractsPeople
         ]);
 
         $people->nationality = $people_dto->is_nationality ?? request()->nationality ?? true;
-        foreach ($people_dto->props as $key => $prop) $people->{$key} = $prop;
+        $this->fillingProps($people,$people_dto->props);
         
         $people->save();
         if (isset($people_dto->phones) && count($people_dto->phones) > 0) {
@@ -104,14 +104,14 @@ class People extends PackageManagement implements ContractsPeople
         }
 
         // FAMILY RELATIONSHIP
-        if (isset($people_dto->family_relationship)) {
+        if (isset($people_dto->family_relationship) && isset($people_dto->family_relationship->name, $people_dto->family_relationship->role)) {
             $family = $people_dto->family_relationship;
             $people->familyRelationship()->updateOrCreate([
                 'people_id' => $people->getKey()
             ], [
                 'role'      => $family->role,
                 'name'      => $family->name,
-                'phone'     => $family->phone
+                'phone'     => $family->phone ?? null
             ]);
         } 
         if (isset($people_dto->card_identity)){

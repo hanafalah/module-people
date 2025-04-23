@@ -41,7 +41,7 @@ class PeopleData extends Data implements DataPeopleData{
     #[MapInputName('sex')]
     #[MapName('sex')]
     #[Enum(Sex::class)]
-    public string $sex;
+    public ?string $sex = null;
 
     #[MapInputName('dob')]
     #[MapName('dob')]
