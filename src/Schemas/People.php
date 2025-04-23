@@ -68,14 +68,14 @@ class People extends PackageManagement implements ContractsPeople
             'pob'             => $people_dto->pob,
             'last_name'       => $people_dto->last_name,
             'first_name'      => $people_dto->first_name,
-            'sex'             => $people_dto->sex,
-            'blood_type'      => $people_dto->blood_type,
-            'country_id'      => $people_dto->country_id,
-            'father_name'     => $people_dto->father_name,
-            'mother_name'     => $people_dto->mother_name,
-            'last_education'  => $people_dto->last_education, 
-            'total_children'  => $people_dto->last_education, 
-            'marital_status'  => $people_dto->marital_status
+            'sex'             => $people_dto->sex ?? null,
+            'blood_type'      => $people_dto->blood_type ?? null,
+            'country_id'      => $people_dto->country_id ?? null,
+            'father_name'     => $people_dto->father_name ?? null,
+            'mother_name'     => $people_dto->mother_name ?? null,
+            'last_education'  => $people_dto->last_education ?? null, 
+            'total_children'  => $people_dto->total_children ?? null, 
+            'marital_status'  => $people_dto->marital_status ?? null
         ]);
 
         $people->nationality = $people_dto->is_nationality ?? request()->nationality ?? true;
