@@ -26,14 +26,6 @@ class People extends PackageManagement implements ContractsPeople
         ]
     ];
 
-    protected function viewUsingRelation(): array{
-        return [];
-    }
-
-    protected function showUsingRelation(): array{
-        return [];
-    }
-
     public function prepareShowPeople(?Model $model = null, ?array $attributes = null): Model{
         $attributes ??= request()->all();
 
