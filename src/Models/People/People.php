@@ -19,6 +19,7 @@ class People extends BaseModel
 {
     use HasUlids, HasCardIdentity, HasAddress, HasUserReference, HasProps, HasLocation, HasPhone;
 
+    protected $table          = "peoples";
     protected $keyType        = "string";
     protected $primaryKey     = "id";
     protected $identity_flags = [];
