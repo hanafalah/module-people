@@ -17,9 +17,10 @@ use Hanafalah\ModuleRegional\Concerns\HasLocation;
 
 class People extends BaseModel
 {
-    use HasUlids, HasCardIdentity, HasAddress, HasUserReference, HasProps, HasLocation, HasPhone;
+    use HasUlids, HasCardIdentity, HasAddress, 
+        HasUserReference, HasProps, HasLocation, HasPhone;
 
-    protected $table          = "peoples";
+    public $incrementing      = false;
     protected $keyType        = "string";
     protected $primaryKey     = "id";
     protected $list           = ['id', 'uuid', 'name', 'sex', 'dob', 'pob'];

@@ -26,35 +26,6 @@ class People extends PackageManagement implements ContractsPeople
         ]
     ];
 
-    protected function viewUsingRelation(): array{
-        return [];
-    }
-
-    protected function showUsingRelation(): array{
-        return [];
-    }
-
-    public function prepareShowPeople(?Model $model = null, ?array $attributes = null): Model{
-        $attributes ??= request()->all();
-
-        $model ??= $this->getPeople();
-        if (!isset($model)) {
-            $id = $attributes['id'] ?? null;
-            if (!isset($id)) throw new \Exception('No id provided', 422);
-
-            $model = $this->people()->with($this->showUsingRelation())->find($id);
-        } else {
-            $model->load($this->showUsingRelation());
-        }
-        return static::$people_model = $model;
-    }
-
-    public function showPeople(?Model $model = null): array{
-        return $this->showEntityResource(function() use ($model){
-            return $this->prepareShowPeople($model);
-        });
-    }
-
     public function prepareStorePeople(PeopleData $people_dto): Model{
         if (!isset($people_dto->name) && isset($people_dto->last_name)) {
             $people_dto->name = trim(implode(' ', [$people_dto->first_name ?? '', $people_dto->last_name]));
@@ -136,17 +107,4 @@ class People extends PackageManagement implements ContractsPeople
         $people->setAttribute('prop_card_identity',$card_identity);
     }
 
-    public function storePeople(?PeopleData $people_dto = null): array{
-        return $this->transaction(function () use ($people_dto){
-            return $this->showPeople($this->prepareStorePeople($people_dto ?? $this->requestDTO(PeopleData::class)));
-        });
-    }
-
-    public function getPeople(): mixed{
-        return static::$people_model;
-    }
-
-    public function people(mixed $conditionals = []): Builder{
-        return $this->PeopleModel()->withParameters()->conditionals($this->mergeCondition($conditionals));
-    }
 }
