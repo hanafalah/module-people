@@ -19,7 +19,6 @@ class People extends BaseModel
 {
     use HasUlids, HasCardIdentity, HasAddress, HasUserReference, HasProps, HasLocation, HasPhone;
 
-    protected $table          = "peoples";
     protected $keyType        = "string";
     protected $primaryKey     = "id";
     protected $identity_flags = [];
@@ -31,11 +30,6 @@ class People extends BaseModel
     ];
 
     protected $prop_attributes = [];
-
-    protected static function newFactory()
-    {
-        return \Hanafalah\ModulePeople\Factories\People\PeopleFactory::new();
-    }
 
     public function getViewResource(){
         return ViewPeople::class;
