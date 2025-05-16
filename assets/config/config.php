@@ -1,28 +1,30 @@
 <?php
 
 use Hanafalah\ModulePeople\{
-    Models as ModulePeople,
-    Contracts
+    Commands
 };
 
 return [
-    "namespace"     => "Hanafalah\ModulePeople",
-    "paths"         => [
-        "base_path"    => __DIR__.'\\..\\'
-    ],
+    'namespace' => 'Hanafalah\\ModulePeople',
     'app' => [
         'contracts' => [
             //ADD YOUR CONTRACTS HERE
-        ],
+        ]
     ],
     'libs' => [
         'model' => 'Models',
         'contract' => 'Contracts',
         'schema' => 'Schemas',
-        'database' => 'Database'
+        'database' => 'Database',
+        'data' => 'Data',
+        'resource' => 'Resources',
+        'migration' => '../assets/database/migrations'
     ],
     'database' => [
         'models' => [
         ]
+    ],
+    'commands' => [
+        Commands\InstallMakeCommand::class
     ]
 ];
