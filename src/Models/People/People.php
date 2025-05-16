@@ -22,7 +22,6 @@ class People extends BaseModel
     protected $table          = "peoples";
     protected $keyType        = "string";
     protected $primaryKey     = "id";
-    protected $identity_flags = [];
     protected $list           = ['id', 'uuid', 'name', 'sex', 'dob', 'pob'];
     protected $show           = [
         'last_education', 'father_name', 'mother_name', 
