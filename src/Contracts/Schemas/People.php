@@ -7,13 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
 use Hanafalah\ModulePeople\Contracts\Data\PeopleData;
 
+/**
+ * @see \Hanafalah\ModulePeople\Schemas\People
+ * @method self conditionals(mixed $conditionals)
+ * @method bool deletePeople()
+ * @method mixed getPeople()
+ * @method array showPeople(?Model $model = null)
+ * @method Collection prepareViewPeopleList()
+ * @method array viewPeopleList()
+ * @method LengthAwarePaginator prepareViewPeoplePaginate(PaginateData $paginate_dto)
+ * @method array viewPeoplePaginate(?PaginateData $paginate_dto = null)
+ * @method array storePeople(?PeopleData $people_dto = null)
+ */
 interface People extends DataManagement
 {
-    public function prepareShowPeople(?Model $model = null, ?array $attributes = null): Model;
-    public function showPeople(?Model $model = null): array;
     public function prepareStorePeople(PeopleData $people_dto): Model;
-    public function storePeople(?PeopleData $people_dto = null): array;
-    public function getPeople(): mixed;
-    public function people(mixed $conditionals = []): Builder;
-    
 }

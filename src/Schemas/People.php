@@ -26,35 +26,6 @@ class People extends PackageManagement implements ContractsPeople
         ]
     ];
 
-    protected function viewUsingRelation(): array{
-        return [];
-    }
-
-    protected function showUsingRelation(): array{
-        return [];
-    }
-
-    public function prepareShowPeople(?Model $model = null, ?array $attributes = null): Model{
-        $attributes ??= request()->all();
-
-        $model ??= $this->getPeople();
-        if (!isset($model)) {
-            $id = $attributes['id'] ?? null;
-            if (!isset($id)) throw new \Exception('No id provided', 422);
-
-            $model = $this->people()->with($this->showUsingRelation())->find($id);
-        } else {
-            $model->load($this->showUsingRelation());
-        }
-        return static::$people_model = $model;
-    }
-
-    public function showPeople(?Model $model = null): array{
-        return $this->showEntityResource(function() use ($model){
-            return $this->prepareShowPeople($model);
-        });
-    }
-
     public function prepareStorePeople(PeopleData $people_dto): Model{
         if (!isset($people_dto->name) && isset($people_dto->last_name)) {
             $people_dto->name = trim(implode(' ', [$people_dto->first_name ?? '', $people_dto->last_name]));
@@ -68,18 +39,18 @@ class People extends PackageManagement implements ContractsPeople
             'pob'             => $people_dto->pob,
             'last_name'       => $people_dto->last_name,
             'first_name'      => $people_dto->first_name,
-            'sex'             => $people_dto->sex,
-            'blood_type'      => $people_dto->blood_type,
-            'country_id'      => $people_dto->country_id,
-            'father_name'     => $people_dto->father_name,
-            'mother_name'     => $people_dto->mother_name,
-            'last_education'  => $people_dto->last_education, 
-            'total_children'  => $people_dto->last_education, 
-            'marital_status'  => $people_dto->marital_status
+            'sex'             => $people_dto->sex ?? null,
+            'blood_type'      => $people_dto->blood_type ?? null,
+            'country_id'      => $people_dto->country_id ?? null,
+            'father_name'     => $people_dto->father_name ?? null,
+            'mother_name'     => $people_dto->mother_name ?? null,
+            'last_education'  => $people_dto->last_education ?? null, 
+            'total_children'  => $people_dto->total_children ?? null, 
+            'marital_status'  => $people_dto->marital_status ?? null
         ]);
 
         $people->nationality = $people_dto->is_nationality ?? request()->nationality ?? true;
-        foreach ($people_dto->props as $key => $prop) $people->{$key} = $prop;
+        $this->fillingProps($people,$people_dto->props);
         
         $people->save();
         if (isset($people_dto->phones) && count($people_dto->phones) > 0) {
@@ -89,7 +60,7 @@ class People extends PackageManagement implements ContractsPeople
 
         if (isset($people_dto->address)){
             $address = $people_dto->address;
-            if (isset($address->ktp)) {
+            if (isset($address->ktp,$address->ktp->name)) {
                 $address->ktp = $this->requestDTO(AddressData::class,$address->ktp->toArray());
                 $people->setAddress(Flag::KTP->value, $address->ktp->toArray());
             }
@@ -97,21 +68,21 @@ class People extends PackageManagement implements ContractsPeople
             $same_as_ktp = isset($address->residence_same_as_ktp) && $address->residence_same_as_ktp;
             if ($same_as_ktp) $address->residence = $address->ktp;            
     
-            if (isset($address->residence)) {            
+            if (isset($address->residence,$address->residence->name)) {
                 if (!$same_as_ktp) $address->residence = $this->requestDTO(AddressData::class,$address->residence->toArray());
                 $people->setAddress(Flag::RESIDENCE->value, $address->residence->toArray());
             }
         }
 
         // FAMILY RELATIONSHIP
-        if (isset($people_dto->family_relationship)) {
+        if (isset($people_dto->family_relationship) && isset($people_dto->family_relationship->name, $people_dto->family_relationship->role)) {
             $family = $people_dto->family_relationship;
             $people->familyRelationship()->updateOrCreate([
                 'people_id' => $people->getKey()
             ], [
                 'role'      => $family->role,
                 'name'      => $family->name,
-                'phone'     => $family->phone
+                'phone'     => $family->phone ?? null
             ]);
         } 
         if (isset($people_dto->card_identity)){
@@ -136,17 +107,4 @@ class People extends PackageManagement implements ContractsPeople
         $people->setAttribute('prop_card_identity',$card_identity);
     }
 
-    public function storePeople(?PeopleData $people_dto = null): array{
-        return $this->transaction(function () use ($people_dto){
-            return $this->showPeople($this->prepareStorePeople($people_dto ?? $this->requestDTO(PeopleData::class)));
-        });
-    }
-
-    public function getPeople(): mixed{
-        return static::$people_model;
-    }
-
-    public function people(mixed $conditionals = []): Builder{
-        return $this->PeopleModel()->withParameters()->conditionals($this->mergeCondition($conditionals));
-    }
 }

@@ -17,13 +17,14 @@ use Hanafalah\ModuleRegional\Concerns\HasLocation;
 
 class People extends BaseModel
 {
-    use HasUlids, HasCardIdentity, HasAddress, HasUserReference, HasProps, HasLocation, HasPhone;
+    use HasUlids, HasCardIdentity, HasAddress, 
+        HasUserReference, HasProps, HasLocation, HasPhone;
 
-    protected $table          = "peoples";
+    protected $table          = 'peoples';
+    public $incrementing      = false;
     protected $keyType        = "string";
     protected $primaryKey     = "id";
-    protected $identity_flags = [];
-    protected $list           = ['id', 'name', 'sex', 'dob', 'pob'];
+    protected $list           = ['id', 'uuid', 'name', 'sex', 'dob', 'pob'];
     protected $show           = [
         'last_education', 'father_name', 'mother_name', 
         'blood_type', 'first_name', 'last_name', 
@@ -31,11 +32,6 @@ class People extends BaseModel
     ];
 
     protected $prop_attributes = [];
-
-    protected static function newFactory()
-    {
-        return \Hanafalah\ModulePeople\Factories\People\PeopleFactory::new();
-    }
 
     public function getViewResource(){
         return ViewPeople::class;

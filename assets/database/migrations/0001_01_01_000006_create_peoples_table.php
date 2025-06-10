@@ -36,12 +36,13 @@ return new class extends Migration
                 $country = app(config('database.models.Country', Country::class));
 
                 $table->ulid('id')->primary();
+                $table->string('uuid', 36)->nullable();
                 $table->string('name', 100)->nullable(false);
                 $table->string('first_name', 50)->nullable();
                 $table->string('last_name', 50)->nullable();
                 $table->date('dob')->nullable();
                 $table->string('pob', 150)->nullable();
-                $table->enum('sex', Sex::cases())->nullable(false);
+                $table->enum('sex', array_column(Sex::cases(), 'value'))->nullable();
                 $table->enum('marital_status', MaritalStatus::cases())->nullable();
                 $table->enum('blood_type', array_column(BloodType::cases(), 'value'))->nullable();
                 $table->string('mother_name', 50)->nullable();
