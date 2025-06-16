@@ -45,10 +45,6 @@ class People extends BaseModel
         return array_column(BloodType::cases(), 'value');
     }
 
-    public function initializePeople(){
-        $this->identity_flags = Enums\People\CardIdentity::cases();
-    }
-
     public function country(){
         return $this->belongsToModel('Country');
     }
