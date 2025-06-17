@@ -2,18 +2,17 @@
 
 namespace Hanafalah\ModulePeople\Schemas;
 
-use Hanafalah\LaravelSupport\Supports\PackageManagement;
 use Hanafalah\ModulePeople\Contracts\Schemas\People as ContractsPeople;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModuleRegional\Enums\Address\Flag;
-use Hanafalah\ModulePeople\Enums\People\CardIdentity;
 use Hanafalah\ModuleRegional\Contracts\Data\AddressData;
+use Hanafalah\ModulePeople\Enums\People\CardIdentity;
 use Hanafalah\ModulePeople\Contracts\Data\CardIdentityData;
 use Hanafalah\ModulePeople\Contracts\Data\PeopleData;
+use Hanafalah\ModulePeople\Supports\BaseModulePeople;
 use Illuminate\Support\Str;
 
-class People extends PackageManagement implements ContractsPeople
+class People extends BaseModulePeople implements ContractsPeople
 {
     protected string $__entity = 'People';
     public static $people_model;
@@ -91,7 +90,6 @@ class People extends PackageManagement implements ContractsPeople
         }
         $people->save();
         $people->refresh();
-        // $this->forgetTags('people');
 
         return static::$people_model = $people;
     }

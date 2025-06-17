@@ -8,7 +8,6 @@ use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\LaravelSupport\Concerns\Support\HasPhone;
 use Hanafalah\ModuleCardIdentity\Concerns\HasCardIdentity;
 use Hanafalah\ModuleUser\Concerns\UserReference\HasUserReference;
-use Hanafalah\ModulePeople\Enums;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
 use Hanafalah\ModulePeople\Resources\People\ShowPeople;
 use Hanafalah\ModulePeople\Resources\People\ViewPeople;
