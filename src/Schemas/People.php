@@ -33,19 +33,19 @@ class People extends BaseModulePeople implements ContractsPeople
         $people = $this->people()->updateOrCreate([
             'id' => $people_dto->id ?? null
         ], [
-            'name'            => $people_dto->name,
-            'dob'             => $people_dto->dob,
-            'pob'             => $people_dto->pob,
-            'last_name'       => $people_dto->last_name,
-            'first_name'      => $people_dto->first_name,
-            'sex'             => $people_dto->sex ?? null,
-            'blood_type'      => $people_dto->blood_type ?? null,
-            'country_id'      => $people_dto->country_id ?? null,
-            'father_name'     => $people_dto->father_name ?? null,
-            'mother_name'     => $people_dto->mother_name ?? null,
-            'last_education'  => $people_dto->last_education ?? null, 
-            'total_children'  => $people_dto->total_children ?? null, 
-            'marital_status'  => $people_dto->marital_status ?? null
+            'name'               => $people_dto->name,
+            'dob'                => $people_dto->dob,
+            'pob'                => $people_dto->pob,
+            'last_name'          => $people_dto->last_name,
+            'first_name'         => $people_dto->first_name,
+            'sex'                => $people_dto->sex ?? null,
+            'blood_type'         => $people_dto->blood_type ?? null,
+            'country_id'         => $people_dto->country_id ?? null,
+            'father_name'        => $people_dto->father_name ?? null,
+            'mother_name'        => $people_dto->mother_name ?? null,
+            'last_education_id'  => $people_dto->last_education_id ?? null, 
+            'total_children'     => $people_dto->total_children ?? null, 
+            'marital_status'     => $people_dto->marital_status ?? null
         ]);
 
         $people->nationality = $people_dto->is_nationality ?? request()->nationality ?? true;

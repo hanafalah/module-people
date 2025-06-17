@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
 use Hanafalah\ModulePeople\Enums\People\MaritalStatus;
 use Hanafalah\ModulePeople\Enums\People\Sex;
+use Hanafalah\ModulePeople\Models\Education;
 use Hanafalah\ModulePeople\Models\Identity\Tribe;
 use Hanafalah\ModulePeople\Models\People\{
     People
@@ -33,7 +34,8 @@ return new class extends Migration
         $table_name = $this->__table->getTable();
         if (!$this->isTableExists()) {
             Schema::create($table_name, function (Blueprint $table) {
-                $country = app(config('database.models.Country', Country::class));
+                $country   = app(config('database.models.Country', Country::class));
+                $education = app(config('database.models.Education', Education::class));
 
                 $table->ulid('id')->primary();
                 $table->string('uuid', 36)->nullable();
@@ -42,12 +44,13 @@ return new class extends Migration
                 $table->string('last_name', 50)->nullable();
                 $table->date('dob')->nullable();
                 $table->string('pob', 150)->nullable();
-                $table->enum('sex', array_column(Sex::cases(), 'value'))->nullable();
-                $table->enum('marital_status', MaritalStatus::cases())->nullable();
-                $table->enum('blood_type', array_column(BloodType::cases(), 'value'))->nullable();
+                $table->string('sex',100)->comment(implode(', ',array_column(Sex::cases(), 'value')))->nullable(false);
+                $table->string('marital_status',100)->comment(implode(', ',array_column(MaritalStatus::cases(),'value')))->nullable();
+                $table->string('blood_type',100)->comment(implode(', ',array_column(BloodType::cases(), 'value')))->nullable();
                 $table->string('mother_name', 50)->nullable();
                 $table->string('father_name', 50)->nullable();
-                $table->string('last_education', 150)->nullable();
+                $table->foreignIdFor($education::class,'last_education_id')->nullable()->index()
+                      ->constrained()->cascadeOnUpdate()->nullOnDelete();
                 $table->unsignedTinyInteger('total_children')->nullable();
 
                 $table->foreignIdFor($country::class)->nullable()

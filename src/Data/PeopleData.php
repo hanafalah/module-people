@@ -52,9 +52,9 @@ class PeopleData extends Data implements DataPeopleData{
     #[MapName('pob')]
     public ?string $pob = null;
 
-    #[MapInputName('last_education')]
-    #[MapName('last_education')]
-    public ?string $last_education = null;
+    #[MapInputName('last_education_id')]
+    #[MapName('last_education_id')]
+    public mixed $last_education_id = null;
 
     #[MapInputName('father_name')]
     #[MapName('father_name')]
@@ -105,4 +105,28 @@ class PeopleData extends Data implements DataPeopleData{
     #[MapInputName('props')]
     #[MapName('props')]
     public ?array $props = [];
+
+    public static function after(self $data): self{
+        $new = static::new();
+        $data->props['prop_country'] = [
+            'id'   => $data->country_id ?? null,
+            'name' => null
+        ];
+        if (isset($data->props['prop_country']['id']) && !isset($data->props['prop_country']['name'])){
+            $country = $new->CountryModel()->findOrFail($data->props['prop_country']['id']);
+            $data->props['prop_country']['name'] = $country->name;
+        }
+
+        $data->props['prop_last_education'] = [
+            'id'   => $data->last_education_id ?? null,
+            'label' => null,
+            'name' => null
+        ];
+        if (isset($data->props['prop_last_education']['id']) && !isset($data->props['prop_last_education']['name'])){
+            $last_education = $new->EducationModel()->findOrFail($data->props['prop_last_education']['id']);
+            $data->props['prop_last_education']['name'] = $last_education->name;
+            $data->props['prop_last_education']['label'] = $last_education->label;
+        }
+        return $data;
+    }
 }

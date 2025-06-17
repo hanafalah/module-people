@@ -23,7 +23,7 @@ class ViewPeople extends ApiResource
             'last_name'     => $this->last_name,
             "dob"           => $this->dob ?? null,
             "pob"           => $this->pob ?? null,
-            "sex"           => isset($this->sex) ? intval($this->sex) : null,
+            "sex"           => $this->sex ?? null,
             'card_identity' => $this->prop_card_identity
         ];
 

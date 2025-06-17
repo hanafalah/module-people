@@ -25,7 +25,7 @@ class People extends BaseModel
     protected $primaryKey     = "id";
     protected $list           = ['id', 'uuid', 'name', 'sex', 'dob', 'pob'];
     protected $show           = [
-        'last_education', 'father_name', 'mother_name', 
+        'last_education_id', 'father_name', 'mother_name', 
         'blood_type', 'first_name', 'last_name', 
         'country_id', 'total_children', 'marital_status'
     ];

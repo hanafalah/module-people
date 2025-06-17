@@ -16,6 +16,8 @@ class EducationSeeder extends Seeder
         $educationModel = app(config('database.models.Education'));
 
         $data = [
+            ['label' => 'Nil', 'name' => 'Tidak Sekolah'],
+            ['label' => 'None', 'name' => 'Belum Sekolah'],
             ['label' => 'SD', 'name' => 'Sekolah Dasar'],
             ['label' => 'SMP', 'name' => 'Sekolah Menengah Pertama'],
             ['label' => 'SMA', 'name' => 'Sekolah Menengah Atas'],
