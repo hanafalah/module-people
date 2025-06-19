@@ -9,6 +9,7 @@ use Hanafalah\ModulePeople\Contracts\Data\PeopleData;
 
 /**
  * @see \Hanafalah\ModulePeople\Schemas\People
+ * @method self setParamLogic(string $logic, bool $search_value = false, ?array $optionals = [])
  * @method self conditionals(mixed $conditionals)
  * @method bool deletePeople()
  * @method mixed getPeople()

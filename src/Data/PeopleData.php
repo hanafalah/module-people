@@ -107,6 +107,10 @@ class PeopleData extends Data implements DataPeopleData{
     public ?array $props = [];
 
     public static function after(self $data): self{
+        if (!isset($data->name) && isset($data->last_name)) {
+            $data->name = trim(implode(' ', [$data->first_name ?? '', $data->last_name]));
+        }
+
         $new = static::new();
         $data->props['prop_country'] = [
             'id'   => $data->country_id ?? null,

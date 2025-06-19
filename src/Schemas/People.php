@@ -26,10 +26,6 @@ class People extends BaseModulePeople implements ContractsPeople
     ];
 
     public function prepareStorePeople(PeopleData $people_dto): Model{
-        if (!isset($people_dto->name) && isset($people_dto->last_name)) {
-            $people_dto->name = trim(implode(' ', [$people_dto->first_name ?? '', $people_dto->last_name]));
-        }
-
         $people = $this->people()->updateOrCreate([
             'id' => $people_dto->id ?? null
         ], [
