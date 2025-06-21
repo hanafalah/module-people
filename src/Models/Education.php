@@ -9,7 +9,7 @@ use Hanafalah\ModulePeople\Resources\Education\{
 
 class Education extends PeopleStuff
 {
-    protected $table = 'people_stuffs';
+    protected $table = 'unicodes';
     
     public function getViewResource(){
         return ViewEducation::class;

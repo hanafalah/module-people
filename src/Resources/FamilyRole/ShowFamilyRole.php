@@ -1,10 +1,10 @@
 <?php
 
-namespace Hanafalah\ModulePeople\Resources\PeopleStuff;
+namespace Hanafalah\ModulePeople\Resources\FamilyRole;
 
-use Hanafalah\LaravelSupport\Resources\Unicode\ShowUnicode;
+use Hanafalah\ModulePeople\Resources\PeopleStuff\ShowPeopleStuff;
 
-class ShowPeopleStuff extends ViewPeopleStuff
+class ShowFamilyRole extends ViewFamilyRole
 {
   /**
    * Transform the resource into an array.
@@ -15,7 +15,7 @@ class ShowPeopleStuff extends ViewPeopleStuff
   public function toArray(\Illuminate\Http\Request $request): array
   {
     $arr = [];
-    $show = $this->resolveNow(new ShowUnicode($this));
+    $show = $this->resolveNow(new ShowPeopleStuff($this));
     $arr = $this->mergeArray(parent::toArray($request),$show,$arr);
     return $arr;
   }

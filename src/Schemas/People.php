@@ -41,7 +41,7 @@ class People extends BaseModulePeople implements ContractsPeople
             'mother_name'        => $people_dto->mother_name ?? null,
             'last_education_id'  => $people_dto->last_education_id ?? null, 
             'total_children'     => $people_dto->total_children ?? null, 
-            'marital_status'     => $people_dto->marital_status ?? null
+            'marital_status_id'  => $people_dto->marital_status_id ?? null
         ]);
 
         $people->nationality = $people_dto->is_nationality ?? request()->nationality ?? true;
@@ -70,19 +70,21 @@ class People extends BaseModulePeople implements ContractsPeople
         }
 
         // FAMILY RELATIONSHIP
-        if (isset($people_dto->family_relationship) && isset($people_dto->family_relationship->name, $people_dto->family_relationship->role)) {
+        if (isset($people_dto->family_relationship) && isset($people_dto->family_relationship->name)) {
             $family = $people_dto->family_relationship;
-            $people->familyRelationship()->updateOrCreate([
-                'people_id' => $people->getKey()
-            ], [
-                'role'      => $family->role,
-                'name'      => $family->name,
-                'phone'     => $family->phone ?? null
-            ]);
+            $family->people_id = $people->getKey();
+            $family = $this->schemaContract('family_relationship')->prepareStoreFamilyRelationship($family);
+            // $people->familyRelationship()->updateOrCreate([
+            //     'people_id' => $people->getKey()
+            // ], [
+            //     'role'      => $family->role,
+            //     'name'      => $family->name,
+            //     'phone'     => $family->phone ?? null
+            // ]);
         } 
         if (isset($people_dto->card_identity)){
             $card_identity = $people_dto->card_identity;
-            $this->peopleIdentity($people, $card_identity,array_column(CardIdentity::cases(),'value'));
+            $this->peopleIdentity($people, $card_identity,array_column(config('module-people.card_identities'),'value'));
         }
         $people->save();
         $people->refresh();

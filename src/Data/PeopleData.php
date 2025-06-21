@@ -69,10 +69,9 @@ class PeopleData extends Data implements DataPeopleData{
     #[Enum(BloodType::class)]
     public ?string $blood_type = null;
 
-    #[MapInputName('marital_status')]
-    #[MapName('marital_status')]
-    #[Enum(MaritalStatus::class)]
-    public ?string $marital_status = null;
+    #[MapInputName('marital_status_id')]
+    #[MapName('marital_status_id')]
+    public mixed $marital_status_id = null;
         
     #[MapInputName('total_children')]
     #[MapName('total_children')]
@@ -121,16 +120,13 @@ class PeopleData extends Data implements DataPeopleData{
             $data->props['prop_country']['name'] = $country->name;
         }
 
-        $data->props['prop_last_education'] = [
-            'id'   => $data->last_education_id ?? null,
-            'label' => null,
-            'name' => null
-        ];
-        if (isset($data->props['prop_last_education']['id']) && !isset($data->props['prop_last_education']['name'])){
-            $last_education = $new->EducationModel()->findOrFail($data->props['prop_last_education']['id']);
-            $data->props['prop_last_education']['name'] = $last_education->name;
-            $data->props['prop_last_education']['label'] = $last_education->label;
-        }
+        $last_education = $new->EducationModel();
+        $last_education = (isset($data->last_education_id)) ? $last_education->findOrFail($data->last_education_id) : $last_education;
+        $props['prop_last_education'] = $last_education->toViewApi()->resolve();
+
+        $marital_status = $new->MaritalStatusModel();
+        $marital_status = (isset($data->marital_status_id)) ? $marital_status->findOrFail($data->marital_status_id) : $marital_status;
+        $props['prop_marital_status'] = $marital_status->toViewApi()->resolve();
         return $data;
     }
 }

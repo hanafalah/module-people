@@ -1,10 +1,10 @@
 <?php
 
-namespace Hanafalah\ModulePeople\Resources\PeopleStuff;
+namespace Hanafalah\ModulePeople\Resources\MaritalStatus;
 
-use Hanafalah\LaravelSupport\Resources\Unicode\ShowUnicode;
+use Hanafalah\ModulePeople\Resources\PeopleStuff\ViewPeopleStuff;
 
-class ShowPeopleStuff extends ViewPeopleStuff
+class ViewMaritalStatus extends ViewPeopleStuff
 {
   /**
    * Transform the resource into an array.
@@ -15,8 +15,7 @@ class ShowPeopleStuff extends ViewPeopleStuff
   public function toArray(\Illuminate\Http\Request $request): array
   {
     $arr = [];
-    $show = $this->resolveNow(new ShowUnicode($this));
-    $arr = $this->mergeArray(parent::toArray($request),$show,$arr);
+    $arr = $this->mergeArray(parent::toArray($request),$arr);
     return $arr;
   }
 }

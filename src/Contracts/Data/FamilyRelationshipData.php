@@ -2,4 +2,6 @@
 
 namespace Hanafalah\ModulePeople\Contracts\Data;
 
-interface FamilyRelationshipData{}
+use Spatie\LaravelData\Contracts\BaseData;
+
+interface FamilyRelationshipData extends BaseData{}

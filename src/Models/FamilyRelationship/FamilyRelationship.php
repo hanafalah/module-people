@@ -8,31 +8,25 @@ use Hanafalah\LaravelSupport\Models\BaseModel;
 use Hanafalah\ModulePeople\Resources\FamilyRelationship\{
     ViewFamilyRelationship, ShowFamilyRelationship
 };
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 class FamilyRelationship extends BaseModel
 {
-    use HasProps, SoftDeletes;
+    use HasUlids, HasProps, SoftDeletes;
 
     protected $list = [
-        'id', 'people_id', 'name', 
-        'phone', 'role', 
-        'reference_id', 'reference_type', 
+        'id', 'people_id', 
+        'name', 
+        'phone', 
+        'family_role_id', 
+        'reference_id', 
+        'reference_type', 
         'props'
     ];
 
-    public function people(){
-        return $this->belongsToModel('People');
-    }
-
-    public function reference(){
-        return $this->morphTo();
-    }
-
-    public function getViewResource(){
-        return ViewFamilyRelationship::class;
-    }
-
-    public function getShowResource(){
-        return ShowFamilyRelationship::class;
-    }
+    public function people(){return $this->belongsToModel('People');}
+    public function reference(){return $this->morphTo();}
+    public function familyRole(){return $this->belongsToModel('FamilyRole');}
+    public function getViewResource(){return ViewFamilyRelationship::class;}
+    public function getShowResource(){return ShowFamilyRelationship::class;}
 }

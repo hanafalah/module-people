@@ -2,19 +2,18 @@
 
 namespace Hanafalah\ModulePeople\Schemas;
 
-use Illuminate\Database\Eloquent\Builder;
+use Hanafalah\LaravelSupport\Schemas\Unicode;
 use Illuminate\Database\Eloquent\Model;
-use Hanafalah\ModulePeople\{
-    Supports\BaseModulePeople
-};
 use Hanafalah\ModulePeople\Contracts\Schemas\PeopleStuff as ContractsPeopleStuff;
 use Hanafalah\ModulePeople\Contracts\Data\PeopleStuffData;
+use Illuminate\Database\Eloquent\Builder;
 
-class PeopleStuff extends BaseModulePeople implements ContractsPeopleStuff
+class PeopleStuff extends Unicode implements ContractsPeopleStuff
 {
     protected string $__entity = 'PeopleStuff';
+    protected $__config_name = 'module-people';
     public static $people_stuff_model;
-    //protected mixed $__order_by_created_at = false; //asc, desc, false
+    protected mixed $__order_by_created_at = false; //asc, desc, false
 
     protected array $__cache = [
         'index' => [
@@ -25,20 +24,11 @@ class PeopleStuff extends BaseModulePeople implements ContractsPeopleStuff
     ];
 
     public function prepareStorePeopleStuff(PeopleStuffData $people_stuff_dto): Model{
-        $add = [
-            'name' => $people_stuff_dto->name,
-            'flag' => $people_stuff_dto->flag,
-            'label' => $people_stuff_dto->label
-        ];
-        if (isset($people_stuff_dto->id)){
-            $guard  = ['id' => $people_stuff_dto->id];
-            $create = [$guard, $add];
-        }else{
-            $create = [$add];
-        }
-        $people_stuff = $this->usingEntity()->updateOrCreate(...$create);
-        $this->fillingProps($people_stuff,$people_stuff_dto->props);
-        $people_stuff->save();
+        $people_stuff = $this->prepareStoreUnicode($people_stuff_dto);
         return static::$people_stuff_model = $people_stuff;
+    }
+
+    public function peopleStuff(mixed $conditionals = null): Builder{
+        return $this->unicode($conditionals);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Hanafalah\ModulePeople\Contracts\Schemas;
 
+use Hanafalah\LaravelSupport\Contracts\Schemas\Unicode;
 use Hanafalah\ModulePeople\Contracts\Data\PeopleStuffData;
 //use Hanafalah\ModulePeople\Contracts\Data\PeopleStuffUpdateData;
-use Hanafalah\LaravelSupport\Contracts\Supports\DataManagement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,10 +25,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method LengthAwarePaginator prepareViewPeopleStuffPaginate(PaginateData $paginate_dto)
  * @method array viewPeopleStuffPaginate(?PaginateData $paginate_dto = null)
  * @method array storePeopleStuff(?PeopleStuffData $people_stuff_dto = null);
- * @method Builder peopleStuff(mixed $conditionals = null);
  */
 
-interface PeopleStuff extends DataManagement
+interface PeopleStuff extends Unicode
 {
     public function prepareStorePeopleStuff(PeopleStuffData $people_stuff_dto): Model;
+    public function peopleStuff(mixed $conditionals = null): Builder;
 }

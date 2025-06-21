@@ -20,8 +20,7 @@ class Education extends PeopleStuff implements ContractsEducation
         ]
     ];
 
-    public function prepareStoreEducation(EducationData $education_dto): Model
-    {
+    public function prepareStoreEducation(EducationData $education_dto): Model{
         $model = parent::prepareStorePeopleStuff($education_dto);
         return static::$education_model = $model;
     }

@@ -9,5 +9,6 @@ class EducationData extends PeopleStuffData implements DataEducationData
     public static function before(array &$attributes)
     {
         $attributes['flag'] = 'Education';
+        parent::before($attributes);
     }
 }
