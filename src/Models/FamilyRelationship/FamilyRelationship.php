@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 class FamilyRelationship extends BaseModel
 {
     use HasUlids, HasProps, SoftDeletes;
+    public $incrementing = false;
+    protected $primaryKey = 'id';
+    protected $keyType = 'string';
 
     protected $list = [
         'id', 'people_id', 

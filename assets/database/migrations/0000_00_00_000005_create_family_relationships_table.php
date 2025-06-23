@@ -36,12 +36,12 @@ return new class extends Migration
                 $family_role = app(config('database.models.FamilyRole', FamilyRole::class));
 
                 $table->ulid('id')->primary();
-                $table->foreignIdFor($people,'people_id')
-                      ->after('id')->index()->constrained()->cascadeOnUpdate()->restrictOnDelete();
+                $table->foreignIdFor($people::class,'people_id')
+                      ->index()->constrained()->cascadeOnUpdate()->restrictOnDelete();
                 $table->string('name',50)->nullable(true);
                 $table->string('phone',50)->nullable(true);
-                $table->foreignIdFor($family_role)
-                        ->after('id')->index()->constrained()
+                $table->foreignIdFor($family_role::class)
+                        ->index()->constrained()
                         ->cascadeOnUpdate()->restrictOnDelete();
                 $table->string('reference_type',50)->nullable(true);
                 $table->string('reference_id',36)->nullable(true);
