@@ -3,6 +3,7 @@
 namespace Hanafalah\ModulePeople\Data;
 
 use Hanafalah\LaravelSupport\Supports\Data;
+use Hanafalah\ModulePeople\Contracts\Data\MaritalStatusData;
 use Hanafalah\ModulePeople\Contracts\Data\PeopleData as DataPeopleData;
 use Hanafalah\ModulePeople\Enums\People\BloodType;
 use Hanafalah\ModulePeople\Enums\People\MaritalStatus;
@@ -72,6 +73,10 @@ class PeopleData extends Data implements DataPeopleData{
     #[MapInputName('marital_status_id')]
     #[MapName('marital_status_id')]
     public mixed $marital_status_id = null;
+
+    #[MapInputName('marital_status')]
+    #[MapName('marital_status')]
+    public ?MaritalStatusData $marital_status = null;
         
     #[MapInputName('total_children')]
     #[MapName('total_children')]
@@ -123,7 +128,7 @@ class PeopleData extends Data implements DataPeopleData{
         $last_education = $new->EducationModel();
         $last_education = (isset($data->last_education_id)) ? $last_education->findOrFail($data->last_education_id) : $last_education;
         $props['prop_last_education'] = $last_education->toViewApi()->resolve();
-
+        
         $marital_status = $new->MaritalStatusModel();
         $marital_status = (isset($data->marital_status_id)) ? $marital_status->findOrFail($data->marital_status_id) : $marital_status;
         $props['prop_marital_status'] = $marital_status->toViewApi()->resolve();
