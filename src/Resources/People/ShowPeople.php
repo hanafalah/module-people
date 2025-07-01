@@ -23,11 +23,11 @@ class ShowPeople extends ViewPeople
             'is_nationality'      => $this->boolValidate('is_nationality'),
             'country'             => $this->prop_country,
             'family_relationship' => $this->relationValidation("familyRelationship", function () {
-                return $this->familyRelationShip->toShowApi();
+                return $this->familyRelationShip->toShowApi()->resolve();
             }),
             'phones' => $this->relationValidation('hasPhones', function () {
                 return $this->hasPhones->transform(function ($phone) {
-                    return $phone->toShowApi();
+                    return $phone->toShowApi()->resolve();
                 });
             }),
             'address' => $this->relationValidation('addresses', function () {

@@ -17,7 +17,7 @@ class ShowFamilyRelationship extends ViewFamilyRelationship
     {
         $arr = [
             'reference' => $this->relationValidation('reference',function(){
-                return $this->reference->toViewApi();
+                return $this->reference->toViewApi()->resolve();
             })
         ];
 
