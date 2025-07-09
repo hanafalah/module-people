@@ -74,13 +74,6 @@ class People extends BaseModulePeople implements ContractsPeople
             $family = $people_dto->family_relationship;
             $family->people_id = $people->getKey();
             $family = $this->schemaContract('family_relationship')->prepareStoreFamilyRelationship($family);
-            // $people->familyRelationship()->updateOrCreate([
-            //     'people_id' => $people->getKey()
-            // ], [
-            //     'role'      => $family->role,
-            //     'name'      => $family->name,
-            //     'phone'     => $family->phone ?? null
-            // ]);
         } 
         if (isset($people_dto->card_identity)){
             $card_identity = $people_dto->card_identity;
