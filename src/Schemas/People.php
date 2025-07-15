@@ -6,7 +6,6 @@ use Hanafalah\ModulePeople\Contracts\Schemas\People as ContractsPeople;
 use Illuminate\Database\Eloquent\Model;
 use Hanafalah\ModuleRegional\Enums\Address\Flag;
 use Hanafalah\ModuleRegional\Contracts\Data\AddressData;
-use Hanafalah\ModulePeople\Enums\People\CardIdentity;
 use Hanafalah\ModulePeople\Contracts\Data\CardIdentityData;
 use Hanafalah\ModulePeople\Contracts\Data\PeopleData;
 use Hanafalah\ModulePeople\Supports\BaseModulePeople;
