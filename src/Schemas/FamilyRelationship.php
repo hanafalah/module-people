@@ -10,7 +10,7 @@ use Hanafalah\ModulePeople\Supports\BaseModulePeople;
 class FamilyRelationship extends BaseModulePeople implements ContractsFamilyRelationship
 {
     protected string $__entity = 'FamilyRelationship';
-    public static $family_relationship_model;
+    public $family_relationship_model;
 
     protected array $__cache = [
         'index' => [
@@ -36,6 +36,6 @@ class FamilyRelationship extends BaseModulePeople implements ContractsFamilyRela
         $family_relationship = $this->usingEntity()->updateOrCreate(...$create);
         $this->fillingProps($family_relationship,$family_relationship_dto->props);
         $family_relationship->save();
-        return static::$family_relationship_model = $family_relationship;
+        return $this->family_relationship_model = $family_relationship;
     }
 }

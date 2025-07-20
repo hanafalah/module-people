@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 class MaritalStatus extends PeopleStuff implements ContractsMaritalStatus
 {
     protected string $__entity = 'MaritalStatus';
-    public static $marital_status_model;
+    public $marital_status_model;
 
     protected array $__cache = [
         'index' => [
@@ -22,7 +22,7 @@ class MaritalStatus extends PeopleStuff implements ContractsMaritalStatus
 
     public function prepareStoreMaritalStatus(MaritalStatusData $marital_status_dto): Model{
         $marital_status = $this->prepareStoreUnicode($marital_status_dto);
-        return static::$marital_status_model = $marital_status;
+        return $this->marital_status_model = $marital_status;
     }
 
     public function maritalStatus(mixed $conditionals = null): Builder{

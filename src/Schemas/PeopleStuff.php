@@ -12,7 +12,7 @@ class PeopleStuff extends Unicode implements ContractsPeopleStuff
 {
     protected string $__entity = 'PeopleStuff';
     protected $__config_name = 'module-people';
-    public static $people_stuff_model;
+    public $people_stuff_model;
     protected mixed $__order_by_created_at = false; //asc, desc, false
 
     protected array $__cache = [
@@ -25,7 +25,7 @@ class PeopleStuff extends Unicode implements ContractsPeopleStuff
 
     public function prepareStorePeopleStuff(PeopleStuffData $people_stuff_dto): Model{
         $people_stuff = $this->prepareStoreUnicode($people_stuff_dto);
-        return static::$people_stuff_model = $people_stuff;
+        return $this->people_stuff_model = $people_stuff;
     }
 
     public function peopleStuff(mixed $conditionals = null): Builder{

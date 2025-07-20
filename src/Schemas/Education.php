@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Education extends PeopleStuff implements ContractsEducation
 {
     protected string $__entity = 'Education';
-    public static $education_model;
+    public $education_model;
 
     protected array $__cache = [
         'index' => [
@@ -22,7 +22,7 @@ class Education extends PeopleStuff implements ContractsEducation
 
     public function prepareStoreEducation(EducationData $education_dto): Model{
         $model = parent::prepareStorePeopleStuff($education_dto);
-        return static::$education_model = $model;
+        return $this->education_model = $model;
     }
 
     public function education(mixed $conditionals = null): Builder{

@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class People extends BaseModulePeople implements ContractsPeople
 {
     protected string $__entity = 'People';
-    public static $people_model;
+    public $people_model;
 
     protected array $__cache = [
         'index' => [
@@ -81,7 +81,7 @@ class People extends BaseModulePeople implements ContractsPeople
         $people->save();
         $people->refresh();
 
-        return static::$people_model = $people;
+        return $this->people_model = $people;
     }
 
     protected function peopleIdentity(Model &$people, CardIdentityData $card_identity_dto, array $types){

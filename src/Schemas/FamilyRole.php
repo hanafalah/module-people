@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 class FamilyRole extends PeopleStuff implements ContractsFamilyRole
 {
     protected string $__entity = 'FamilyRole';
-    public static $family_role_model;
+    public $family_role_model;
 
     protected array $__cache = [
         'index' => [
@@ -22,7 +22,7 @@ class FamilyRole extends PeopleStuff implements ContractsFamilyRole
 
     public function prepareStoreFamilyRole(FamilyRoleData $family_role_dto): Model{
         $family_role = $this->prepareStorePeopleStuff($family_role_dto);
-        return static::$family_role_model = $family_role;
+        return $this->family_role_model = $family_role;
     }
 
     public function familyRole(mixed $conditionals = null): Builder{
