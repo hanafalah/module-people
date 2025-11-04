@@ -10,24 +10,29 @@ class ShowPeople extends ViewPeople
     public function toArray(\Illuminate\Http\Request $request): array
     {
         $arr = [
-            'profile'             => $this->profile,
+            'profile'             => asset($this->profile),
             'blood_type'          => $this->blood_type,
             'last_education_id'   => $this->last_education_id,
             'last_education'      => $this->prop_last_education,
+            'religion_id'         => $this->religion_id,
+            'religion'            => $this->prop_religion,
             'marital_status_id'   => $this->marital_status_id,
-            'marital_status'      => $this->marital_status,
+            'marital_status'      => $this->prop_marital_status,
             'total_children'      => $this->total_children,
             'email'               => $this->email,
             'father_name'         => $this->father_name,
             'mother_name'         => $this->mother_name,
             'is_nationality'      => $this->boolValidate('is_nationality'),
+            'nationality'         => $this->boolValidate('nationality'),
             'country'             => $this->prop_country,
             'family_relationship' => $this->relationValidation("familyRelationship", function () {
                 return $this->familyRelationShip->toShowApi()->resolve();
             }),
+            'phone_1' => $this->phone_1,
+            'phone_2' => $this->phone_2,
             'phones' => $this->relationValidation('hasPhones', function () {
                 return $this->hasPhones->transform(function ($phone) {
-                    return $phone->toShowApi()->resolve();
+                    return $phone->toShowApi();
                 });
             }),
             'address' => $this->relationValidation('addresses', function () {

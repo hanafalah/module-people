@@ -24,8 +24,12 @@ class People extends BaseModulePeople implements ContractsPeople
         ]
     ];
 
-    public function prepareStorePeople(PeopleData $people_dto): Model{
-        $people = $this->people()->updateOrCreate([
+    public function prepareStore(PeopleData $people_dto): Model{
+        return $this->prepareStorePeople($people_dto);
+    }
+
+    protected function createPeople(PeopleData &$people_dto): Model{
+        return $this->people()->updateOrCreate([
             'id' => $people_dto->id ?? null
         ], [
             'name'               => $people_dto->name,
@@ -35,15 +39,21 @@ class People extends BaseModulePeople implements ContractsPeople
             'first_name'         => $people_dto->first_name,
             'sex'                => $people_dto->sex ?? null,
             'blood_type'         => $people_dto->blood_type ?? null,
+            'religion_id'        => $people_dto->religion_id ?? null,
             'country_id'         => $people_dto->country_id ?? null,
             'father_name'        => $people_dto->father_name ?? null,
             'mother_name'        => $people_dto->mother_name ?? null,
+            'religion_id'        => $people_dto->religion_id ?? null,
             'last_education_id'  => $people_dto->last_education_id ?? null, 
             'total_children'     => $people_dto->total_children ?? null, 
             'marital_status_id'  => $people_dto->marital_status_id ?? null
         ]);
+    }
 
-        $people->nationality = $people_dto->is_nationality ?? request()->nationality ?? true;
+    public function prepareStorePeople(PeopleData $people_dto): Model{
+        $people = $this->createPeople($people_dto);
+
+        $people->nationality = $people_dto->props['nationality'] ?? $people_dto->is_nationality ?? true;
         $this->fillingProps($people,$people_dto->props);
         
         $people->save();
@@ -55,7 +65,8 @@ class People extends BaseModulePeople implements ContractsPeople
         if (isset($people_dto->address)){
             $address = $people_dto->address;
             if (isset($address->ktp,$address->ktp->name)) {
-                $address->ktp = $this->requestDTO(AddressData::class,$address->ktp->toArray());
+
+                // $address->ktp = $this->requestDTO(AddressData::class,$address->ktp->toArray());
                 $people->setAddress(Flag::KTP->value, $address->ktp->toArray());
             }
     
@@ -63,7 +74,7 @@ class People extends BaseModulePeople implements ContractsPeople
             if ($same_as_ktp) $address->residence = $address->ktp;            
     
             if (isset($address->residence,$address->residence->name)) {
-                if (!$same_as_ktp) $address->residence = $this->requestDTO(AddressData::class,$address->residence->toArray());
+                // if (!$same_as_ktp) $address->residence = $this->requestDTO(AddressData::class,$address->residence->toArray());
                 $people->setAddress(Flag::RESIDENCE->value, $address->residence->toArray());
             }
         }
@@ -73,14 +84,16 @@ class People extends BaseModulePeople implements ContractsPeople
             $family = $people_dto->family_relationship;
             $family->people_id = $people->getKey();
             $family = $this->schemaContract('family_relationship')->prepareStoreFamilyRelationship($family);
+            $people_dto->props['prop_family_relationship'] = $family->toViewApi()->resolve();
         } 
+
         if (isset($people_dto->card_identity)){
             $card_identity = $people_dto->card_identity;
             $this->peopleIdentity($people, $card_identity,array_column(config('module-people.card_identities'),'value'));
         }
+        $this->fillingProps($people,$people_dto->props);
         $people->save();
         $people->refresh();
-
         return $this->people_model = $people;
     }
 

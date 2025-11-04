@@ -27,10 +27,27 @@ class People extends BaseModel
     protected $show           = [
         'last_education_id', 'father_name', 'mother_name', 
         'blood_type', 'first_name', 'last_name', 
-        'country_id', 'total_children', 'marital_status'
+        'country_id', 'total_children', 'marital_status_id'
+    ];
+
+    protected $casts = [
+        'name'              => 'string',
+        'first_name'        => 'string',
+        'last_name'         => 'string',
+        'sex'               => 'string'
     ];
 
     protected $prop_attributes = [];
+
+    public function viewUsingRelation(): array{
+        return [];
+    }
+
+    public function showUsingRelation(): array{
+        return [
+            'familyRelationship'
+        ];
+    }
 
     public function getViewResource(){
         return ViewPeople::class;
@@ -53,6 +70,6 @@ class People extends BaseModel
     }
 
     public function familyRelationship(){
-        return $this->hasOneModel('FamilyRelationship');
+        return $this->hasOneModel('FamilyRelationship','people_id');
     }
 }
